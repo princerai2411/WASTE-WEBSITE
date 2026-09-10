@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WasteWise – Economic Impact of Solid Waste Management in India</title>
+<meta name="description" content="Explore the economic impact of solid waste management in India. Learn about waste segregation, recycling industries, and sustainability through interactive games, charts, and calculators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#hero" class="nav-logo"><span class="logo-icon">♻️</span> WasteWise</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#hero" class="nav-link">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#game" class="nav-link">Game</a>
+      <a href="#data" class="nav-link">Data</a>
+      <a href="#impact" class="nav-link">Impact</a>
+      <a href="#challenges" class="nav-link">Challenges</a>
+      <a href="#marketplace" class="nav-link">Sell Waste</a>
+      <a href="#free-items" class="nav-link">Free Items</a>
+      <a href="#explore" class="nav-link">Explore</a>
+      <a href="#calculator" class="nav-link">Calculator</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero" id="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-badge">🌍 Sustainability &amp; Economics</span>
+    <h1 class="hero-title">Economic Impact of Solid Waste Management in India</h1>
+    <p class="hero-subtitle">Discover how proper waste management drives economic growth, creates jobs, and builds a sustainable future for India's 1.4 billion people.</p>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-number" data-target="62" data-suffix="">0</div>
+        <div class="stat-unit">Million Tons</div>
+        <div class="stat-label">Waste Generated Annually</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="19" data-suffix="%">0</div>
+        <div class="stat-unit">Recycled</div>
+        <div class="stat-label">Of Total Waste Collected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" data-target="13000" data-prefix="₹">0</div>
+        <div class="stat-unit">Crores</div>
+        <div class="stat-label">Recycling Industry Value</div>
+      </div>
+    </div>
+    <div class="hero-buttons">
+      <a href="#game" class="btn btn-primary">🎮 Play Segregation Game</a>
+      <a href="#data" class="btn btn-secondary">📊 Explore Data</a>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    Scroll to explore
+    <div class="scroll-arrow"></div>
+  </div>
+</header>
+
+<!-- ========== ABOUT ========== -->
+<section class="section about-section" id="about">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">📚 Learn</span>
+      <h2 class="section-title">About Solid Waste Management</h2>
+      <p class="section-subtitle">Understanding the lifecycle of waste and its massive impact on India's economy and environment.</p>
+    </div>
+
+    <div class="about-intro animate-on-scroll">
+      <div class="about-text">
+        <h3>What is Solid Waste Management?</h3>
+        <p>Solid Waste Management (SWM) encompasses the collection, treatment, and disposal of solid materials that are discarded because they have served their purpose or are no longer useful. In India, with rapid urbanization and a population of over 1.4 billion, effective SWM is critical for public health, environmental protection, and economic development.</p>
+        <p>India generates approximately <strong>62 million tons</strong> of solid waste annually, of which only about <strong>43 million tons</strong> is collected, and merely <strong>12 million tons</strong> is processed or treated. The gap represents both an environmental challenge and an economic opportunity worth billions.</p>
+      </div>
+    </div>
+
+    <h3 class="waste-types-title animate-on-scroll">Types of Waste</h3>
+    <div class="waste-types-grid">
+      <div class="waste-card animate-on-scroll">
+        <div class="waste-card-icon">🍌</div>
+        <h4>Organic / Wet Waste</h4>
+        <p>Food scraps, vegetable peels, garden waste, and biodegradable materials. Composting can convert this into valuable fertilizer.</p>
+        <div class="waste-card-stat">~50% of total waste</div>
+      </div>
+      <div class="waste-card animate-on-scroll">
+        <div class="waste-card-icon">🧴</div>
+        <h4>Plastic Waste</h4>
+        <p>Bottles, packaging, bags, and containers. India generates 3.5 million tons of plastic waste annually. Highly recyclable when segregated.</p>
+        <div class="waste-card-stat">~8% of total waste</div>
+      </div>
+      <div class="waste-card animate-on-scroll">
+        <div class="waste-card-icon">📰</div>
+        <h4>Paper &amp; Cardboard</h4>
+        <p>Newspapers, magazines, cardboard boxes, and office paper. Recycling 1 ton of paper saves 17 trees and 7,000 gallons of water.</p>
+        <div class="waste-card-stat">~6% of total waste</div>
+      </div>
+      <div class="waste-card animate-on-scroll">
+        <div class="waste-card-icon">☢️</div>
+        <h4>Hazardous Waste</h4>
+        <p>Batteries, chemicals, medical waste, and e-waste. Requires special handling to prevent environmental contamination.</p>
+        <div class="waste-card-stat">~4% of total waste</div>
+      </div>
+    </div>
+
+    <div class="why-important animate-on-scroll">
+      <h3 class="waste-types-title">Why Proper SWM Matters for the Economy</h3>
+      <div class="importance-grid">
+        <div class="importance-item">
+          <div class="importance-icon">💰</div>
+          <h4>Revenue Generation</h4>
+          <p>The recycling industry in India is worth ₹13,000+ crores and growing rapidly.</p>
+        </div>
+        <div class="importance-item">
+          <div class="importance-icon">👷</div>
+          <h4>Employment</h4>
+          <p>Over 4 million people work in waste management, with potential for millions more green jobs.</p>
+        </div>
+        <div class="importance-item">
+          <div class="importance-icon">🏥</div>
+          <h4>Healthcare Savings</h4>
+          <p>Proper waste disposal reduces disease outbreaks, saving billions in healthcare costs annually.</p>
+        </div>
+        <div class="importance-item">
+          <div class="importance-icon">🌱</div>
+          <h4>Environmental Protection</h4>
+          <p>Prevents soil and water contamination, protecting agricultural productivity worth lakhs of crores.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== GAME ========== -->
+<section class="section game-section" id="game">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">🎮 Interactive</span>
+      <h2 class="section-title">Waste Segregation Game</h2>
+      <p class="section-subtitle">Drag each waste item into the correct bin. Learn proper waste segregation while having fun!</p>
+    </div>
+
+    <div class="game-container animate-on-scroll">
+      <div class="game-scoreboard">
+        <div class="score-item"><span class="score-label">Score</span><span class="score-value" id="gameScore">0</span></div>
+        <div class="score-item"><span class="score-label">Correct</span><span class="score-value" id="correctCount">0</span></div>
+        <div class="score-item"><span class="score-label">Wrong</span><span class="score-value" id="wrongCount">0</span></div>
+        <button class="btn btn-sm btn-secondary" id="resetGame">🔄 Reset Game</button>
+      </div>
+
+      <div class="game-bins">
+        <div class="bin bin-dropzone bin-green" data-bin="wet">
+          <div class="bin-icon">🟢</div>
+          <div class="bin-label">Wet Waste</div>
+          <div class="bin-desc">Food, Vegetables, Garden Waste</div>
+        </div>
+        <div class="bin bin-dropzone bin-blue" data-bin="dry">
+          <div class="bin-icon">🔵</div>
+          <div class="bin-label">Dry Waste</div>
+          <div class="bin-desc">Plastic, Paper, Metal, Glass</div>
+        </div>
+        <div class="bin bin-dropzone bin-red" data-bin="hazardous">
+          <div class="bin-icon">🔴</div>
+          <div class="bin-label">Hazardous Waste</div>
+          <div class="bin-desc">Batteries, Chemicals, E-waste</div>
+        </div>
+      </div>
+
+      <div class="game-feedback" id="gameFeedback"></div>
+      <div class="game-items" id="gameItems"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DATA ========== -->
+<section class="section data-section" id="data">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">📊 Statistics</span>
+      <h2 class="section-title">Waste Data &amp; Insights</h2>
+      <p class="section-subtitle">Explore India's waste management data through interactive visualizations.</p>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card animate-on-scroll">
+        <h3 class="chart-title">Waste Composition in India</h3>
+        <div class="chart-wrapper"><canvas id="pieChart"></canvas></div>
+      </div>
+      <div class="chart-card animate-on-scroll">
+        <h3 class="chart-title">Annual Waste Generation (Million Tons)</h3>
+        <div class="chart-wrapper"><canvas id="lineChart"></canvas></div>
+      </div>
+      <div class="chart-card animate-on-scroll">
+        <h3 class="chart-title">Recycling Industry Revenue (₹ Crores)</h3>
+        <div class="chart-wrapper"><canvas id="barChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== IMPACT ========== -->
+<section class="section impact-section" id="impact">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">💹 Economy</span>
+      <h2 class="section-title">Economic Impact</h2>
+      <p class="section-subtitle">How solid waste management drives India's economy forward.</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card animate-on-scroll">
+        <div class="impact-icon">👷‍♂️</div>
+        <h3>Job Creation</h3>
+        <div class="impact-stat">4 Million+</div>
+        <p>People employed in the waste management sector. The industry could create <strong>6 million additional green jobs</strong> by 2030 through investment in recycling infrastructure and waste processing.</p>
+      </div>
+      <div class="impact-card animate-on-scroll">
+        <div class="impact-icon">🏭</div>
+        <h3>Recycling Revenue</h3>
+        <div class="impact-stat">₹13,000 Cr+</div>
+        <p>Annual value of the recycling industry in India. Segments include plastic recycling (₹6,000 Cr), paper recycling (₹3,500 Cr), and metal scrap recovery (₹3,500 Cr).</p>
+      </div>
+      <div class="impact-card animate-on-scroll">
+        <div class="impact-icon">⚡</div>
+        <h3>Waste-to-Energy</h3>
+        <div class="impact-stat">556 MW</div>
+        <p>India's waste-to-energy capacity target. Operational and planned plants can process 15,000+ TPD of waste, generating clean electricity and reducing landfill dependency.</p>
+      </div>
+      <div class="impact-card animate-on-scroll">
+        <div class="impact-icon">🏥</div>
+        <h3>Healthcare Savings</h3>
+        <div class="impact-stat">₹5,000 Cr+</div>
+        <p>Estimated annual savings from disease reduction through improved waste management. Cleaner cities mean fewer waterborne diseases and respiratory illnesses.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CHALLENGES ========== -->
+<section class="section challenges-section" id="challenges">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">⚖️ Analysis</span>
+      <h2 class="section-title">Challenges &amp; Opportunities</h2>
+      <p class="section-subtitle">Understanding the hurdles and the immense potential ahead.</p>
+    </div>
+    <div class="two-columns">
+      <div class="column-card challenges-card animate-on-scroll">
+        <div class="column-header"><span class="column-icon">⚠️</span><h3>Challenges</h3></div>
+        <ul class="column-list">
+          <li><span class="list-icon">🚫</span><div><strong>Poor Waste Segregation</strong><p>Less than 30% of waste is segregated at source, making recycling difficult and costly.</p></div></li>
+          <li><span class="list-icon">🏗️</span><div><strong>Lack of Recycling Infrastructure</strong><p>Only 20% of India's waste processing capacity meets modern standards.</p></div></li>
+          <li><span class="list-icon">🗑️</span><div><strong>Landfill Overflow</strong><p>India's 3,159 dumpsites occupy 10,000+ acres. Major cities face landfill crises.</p></div></li>
+          <li><span class="list-icon">📋</span><div><strong>Weak Policy Enforcement</strong><p>Existing regulations are often poorly implemented at the municipal level.</p></div></li>
+        </ul>
+      </div>
+      <div class="column-card opportunities-card animate-on-scroll">
+        <div class="column-header"><span class="column-icon">🚀</span><h3>Opportunities</h3></div>
+        <ul class="column-list">
+          <li><span class="list-icon">♻️</span><div><strong>Circular Economy</strong><p>Shifting to a circular model could unlock ₹40,000 crore in economic value by 2030.</p></div></li>
+          <li><span class="list-icon">🌿</span><div><strong>Green Jobs</strong><p>Waste management can create 6 million new jobs in recycling, composting, and tech.</p></div></li>
+          <li><span class="list-icon">⚡</span><div><strong>Waste-to-Energy Technology</strong><p>Modern incineration and biogas plants can convert waste into 500+ MW of clean energy.</p></div></li>
+          <li><span class="list-icon">🤖</span><div><strong>Smart Waste Management</strong><p>IoT sensors, AI sorting, and GPS-tracked collection can optimize operations by 40%.</p></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== NEW: MARKETPLACE — SELL WASTE & LOCATE COLLECTORS ========== -->
+<section class="section marketplace-section" id="marketplace">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">💰 Marketplace</span>
+      <h2 class="section-title">Sell Your Waste &amp; Find Collectors</h2>
+      <p class="section-subtitle">List scrap you want to sell, share your location, and let nearby collectors reach out to you directly.</p>
+    </div>
+
+    <div class="marketplace-grid animate-on-scroll">
+      <!-- Listing form -->
+      <div class="marketplace-form-card">
+        <h3>📝 List Your Waste</h3>
+        <form id="sellWasteForm">
+          <div class="calc-input-group">
+            <label for="sellWasteType">Waste Type</label>
+            <select id="sellWasteType" class="mp-select" required>
+              <option value="">Select type</option>
+              <option value="plastic">🧴 Plastic</option>
+              <option value="paper">📰 Paper / Cardboard</option>
+              <option value="metal">🔩 Metal / Scrap</option>
+              <option value="ewaste">📱 E-Waste</option>
+              <option value="glass">🫙 Glass</option>
+              <option value="mixed">🗑️ Mixed / Other</option>
+            </select>
+          </div>
+          <div class="mp-row">
+            <div class="calc-input-group">
+              <label for="sellQuantity">Quantity (kg)</label>
+              <div class="input-with-unit"><input type="number" id="sellQuantity" min="1" placeholder="e.g. 10" required><span class="input-unit">KG</span></div>
+            </div>
+            <div class="calc-input-group">
+              <label for="sellPrice">Expected Price (optional)</label>
+              <div class="input-with-unit"><span class="input-unit">₹</span><input type="number" id="sellPrice" min="0" placeholder="Per kg"></div>
+            </div>
+          </div>
+          <div class="calc-input-group">
+            <label for="sellPhoto">Photo</label>
+            <input type="file" id="sellPhoto" accept="image/*" class="mp-file">
+          </div>
+          <div class="calc-input-group">
+            <label for="sellPhone">Contact Number (WhatsApp)</label>
+            <input type="tel" id="sellPhone" class="mp-text" placeholder="e.g. 98765xxxxx" required>
+          </div>
+          <button type="button" id="shareLocationBtn" class="btn btn-secondary btn-sm mp-location-btn">📍 Share My Location</button>
+          <span id="locationStatus" class="mp-location-status">Location not shared yet</span>
+          <button type="submit" id="sellSubmitBtn" class="btn btn-primary mp-submit-btn">List for Pickup</button>
+          <p id="sellFormMsg" class="mp-form-msg"></p>
+        </form>
+      </div>
+
+      <!-- Map + listings -->
+      <div class="marketplace-map-card">
+        <h3>📍 Nearby Listings</h3>
+        <div id="collectorMap" class="mp-map"></div>
+        <div id="sellListings" class="mp-listings-list">
+          <p class="mp-empty-state">Loading listings…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== NEW: FREE BIG ITEMS EXCHANGE ========== -->
+<section class="section free-items-section" id="free-items">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">🎁 Community Exchange</span>
+      <h2 class="section-title">Give Away Big Items for Free</h2>
+      <p class="section-subtitle">Got a table, bed, or iron rods you no longer need? Post it here instead of throwing it away — someone nearby might put it to good use.</p>
+    </div>
+
+    <div class="free-items-layout animate-on-scroll">
+      <div class="marketplace-form-card">
+        <h3>📤 Post an Item</h3>
+        <form id="freeItemForm">
+          <div class="calc-input-group">
+            <label for="freeItemName">Item Name</label>
+            <input type="text" id="freeItemName" class="mp-text" placeholder="e.g. Wooden Dining Table" required>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemCategory">Category</label>
+            <select id="freeItemCategory" class="mp-select" required>
+              <option value="">Select category</option>
+              <option value="furniture">🪑 Furniture</option>
+              <option value="appliance">🔌 Appliance</option>
+              <option value="metal">🔩 Metal / Iron Rods</option>
+              <option value="electronics">💻 Electronics</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemPhoto">Photo (required)</label>
+            <input type="file" id="freeItemPhoto" accept="image/*" class="mp-file" required>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemArea">Area / Locality</label>
+            <input type="text" id="freeItemArea" class="mp-text" placeholder="e.g. Sector 22, Chandigarh" required>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemPhone">Contact Number</label>
+            <input type="tel" id="freeItemPhone" class="mp-text" placeholder="e.g. 98765xxxxx" required>
+          </div>
+          <button type="submit" id="freeItemSubmitBtn" class="btn btn-primary mp-submit-btn">Post Item</button>
+          <p id="freeItemFormMsg" class="mp-form-msg"></p>
+        </form>
+      </div>
+
+      <div class="free-items-grid" id="freeItemsGrid">
+        <p class="mp-empty-state">Loading items…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== EXPLORE ========== -->
+<section class="section explore-section" id="explore">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">🧰 Explore</span>
+      <h2 class="section-title">Explore More Tools</h2>
+      <p class="section-subtitle">Interactive cards packed with insights, tools, and fun activities about waste management.</p>
+    </div>
+    <div class="explore-grid">
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">⏱️</span><h3>Live Waste Counter</h3></div>
+        <p class="explore-card-desc">Real-time estimate of waste generated in India today.</p>
+        <div class="live-counter-display">
+          <span class="live-counter-value" id="liveWasteCounter">0</span>
+          <span class="live-counter-unit">Tons generated today</span>
+        </div>
+        <div class="live-counter-meta">📈 ~170,000 tons/day avg.</div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">🔄</span><h3>Waste Lifecycle</h3></div>
+        <p class="explore-card-desc">Follow the journey of waste from source to destination.</p>
+        <div class="lifecycle-flow">
+          <div class="lifecycle-step"><span class="lifecycle-icon">🏠</span><span class="lifecycle-label">Household</span></div>
+          <span class="lifecycle-arrow">→</span>
+          <div class="lifecycle-step"><span class="lifecycle-icon">🚛</span><span class="lifecycle-label">Collection</span></div>
+          <span class="lifecycle-arrow">→</span>
+          <div class="lifecycle-step"><span class="lifecycle-icon">🗂️</span><span class="lifecycle-label">Segregation</span></div>
+          <span class="lifecycle-arrow">→</span>
+          <div class="lifecycle-step"><span class="lifecycle-icon">♻️</span><span class="lifecycle-label">Recycling</span></div>
+        </div>
+        <div class="lifecycle-destinations">
+          <span class="lifecycle-dest">🌿 Compost</span>
+          <span class="lifecycle-dest">🏔️ Landfill</span>
+        </div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">🏙️</span><h3>City Waste Comparison</h3></div>
+        <p class="explore-card-desc">Compare waste stats across major Indian cities.</p>
+        <div class="city-select-wrap">
+          <select id="citySelect" class="city-select">
+            <option value="delhi">Delhi</option>
+            <option value="mumbai">Mumbai</option>
+            <option value="bangalore">Bangalore</option>
+            <option value="chandigarh">Chandigarh</option>
+          </select>
+        </div>
+        <div class="city-chart-wrap"><canvas id="cityBarChart"></canvas></div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">💸</span><h3>Waste-to-Money Converter</h3></div>
+        <p class="explore-card-desc">See how much your recyclables are worth.</p>
+        <div class="w2m-inputs">
+          <div class="w2m-row"><label>🧴 Plastic (kg)</label><input type="number" id="w2mPlastic" min="0" placeholder="0"></div>
+          <div class="w2m-row"><label>📰 Paper (kg)</label><input type="number" id="w2mPaper" min="0" placeholder="0"></div>
+          <div class="w2m-row"><label>🔩 Metal (kg)</label><input type="number" id="w2mMetal" min="0" placeholder="0"></div>
+        </div>
+        <button class="btn btn-sm btn-primary" id="w2mCalcBtn">Convert 💰</button>
+        <div class="w2m-result" id="w2mResult" style="display:none;">
+          <div class="w2m-value" id="w2mValue">₹0</div>
+          <div class="w2m-savings" id="w2mSavings"></div>
+        </div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">❓</span><h3>Waste Awareness Quiz</h3></div>
+        <div class="quiz-content" id="quizContent">
+          <div class="quiz-progress" id="quizProgress">Question 1 of 5</div>
+          <div class="quiz-question" id="quizQuestion"></div>
+          <div class="quiz-options" id="quizOptions"></div>
+        </div>
+        <div class="quiz-result" id="quizResult" style="display:none;">
+          <div class="quiz-score" id="quizScore"></div>
+          <button class="btn btn-sm btn-secondary" id="quizRestart">Retry 🔁</button>
+        </div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">💡</span><h3>Tip of the Day</h3></div>
+        <div class="tip-content">
+          <p class="tip-text" id="tipText"></p>
+          <button class="btn btn-sm btn-secondary" id="newTipBtn">New Tip 🔄</button>
+        </div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">🌍</span><h3>Environmental Impact</h3></div>
+        <p class="explore-card-desc">What recycling 1 ton of waste achieves:</p>
+        <div class="env-metrics">
+          <div class="env-metric"><span class="env-metric-icon">💨</span><span class="env-metric-value">2.5 tons</span><span class="env-metric-label">CO₂ Emissions Reduced</span></div>
+          <div class="env-metric"><span class="env-metric-icon">⚡</span><span class="env-metric-value">3,000 kWh</span><span class="env-metric-label">Energy Saved</span></div>
+          <div class="env-metric"><span class="env-metric-icon">🌳</span><span class="env-metric-value">17 Trees</span><span class="env-metric-label">Preserved per Ton of Paper</span></div>
+        </div>
+      </div>
+
+      <div class="explore-card animate-on-scroll">
+        <div class="explore-card-header"><span class="explore-card-icon">🏅</span><h3>Recycling Achievement</h3></div>
+        <p class="explore-card-desc">Complete the waste segregation game to earn a badge!</p>
+        <div class="badge-display" id="badgeDisplay">
+          <div class="badge-icon" id="badgeIcon">🎯</div>
+          <div class="badge-title" id="badgeTitle">Play the Game First</div>
+          <div class="badge-subtitle" id="badgeSubtitle">Score points in the waste segregation game above to unlock your achievement badge.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== CALCULATOR ========== -->
+<section class="section calculator-section" id="calculator">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">🧮 Tool</span>
+      <h2 class="section-title">Waste Impact Calculator</h2>
+      <p class="section-subtitle">Find out how much waste you produce and the potential impact of recycling.</p>
+    </div>
+    <div class="calculator-container animate-on-scroll">
+      <div class="calc-input-section">
+        <h3>Enter Your Daily Waste</h3>
+        <div class="calc-input-group">
+          <label for="dailyWaste">Daily waste produced (in kg)</label>
+          <div class="input-with-unit"><input type="number" id="dailyWaste" min="0" step="0.1" placeholder="e.g. 1.5"><span class="input-unit">kg/day</span></div>
+        </div>
+        <div class="calc-input-group">
+          <label for="householdSize">Household members</label>
+          <div class="input-with-unit"><input type="number" id="householdSize" min="1" placeholder="e.g. 4"><span class="input-unit">people</span></div>
+        </div>
+        <button class="btn" id="calcBtn">Calculate Impact 📊</button>
+      </div>
+      <div class="calc-results" id="calcResults" style="display:none;">
+        <h3>Your Waste Impact</h3>
+        <div class="result-cards">
+          <div class="result-card"><div class="result-icon">📅</div><div class="result-value" id="yearlyWaste">-</div><div class="result-label">Yearly Waste (kg)</div></div>
+          <div class="result-card"><div class="result-icon">♻️</div><div class="result-value" id="recyclable">-</div><div class="result-label">Recyclable Waste (kg)</div></div>
+          <div class="result-card"><div class="result-icon">🌳</div><div class="result-value" id="co2Saved">-</div><div class="result-label">CO₂ Savings (kg)</div></div>
+          <div class="result-card"><div class="result-icon">💰</div><div class="result-value" id="economicValue">-</div><div class="result-label">Economic Value (₹)</div></div>
+        </div>
+        <div class="result-insight" id="resultInsight"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-quote">
+      <p>"The greatest threat to our planet is the belief that someone else will save it."</p>
+      <span>— Robert Swan</span>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="https://cpcb.nic.in" target="_blank" rel="noopener">Central Pollution Control Board</a>
+        <a href="https://swachhbharatmission.gov.in" target="_blank" rel="noopener">Swachh Bharat Mission</a>
+        <a href="https://moef.gov.in" target="_blank" rel="noopener">Ministry of Environment</a>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#about">About SWM</a>
+        <a href="#game">Play Game</a>
+        <a href="#data">View Data</a>
+        <a href="#calculator">Calculator</a>
+      </div>
+      <div class="footer-col">
+        <h4>Project</h4>
+        <p class="footer-note">WasteWise is an educational project created to raise awareness about solid waste management and its economic impact in India.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">♻️ WasteWise © 2026 • Built for sustainability education</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+<script src="supabase-client.js"></script>
+<script src="marketplace.js"></script>
+</body>
+</html>

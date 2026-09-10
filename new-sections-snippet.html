@@ -1,0 +1,114 @@
+<!-- ========== NEW: MARKETPLACE — SELL WASTE & LOCATE COLLECTORS ========== -->
+<section class="section marketplace-section" id="marketplace">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">💰 Marketplace</span>
+      <h2 class="section-title">Sell Your Waste &amp; Find Collectors</h2>
+      <p class="section-subtitle">List scrap you want to sell, share your location, and let nearby collectors reach out to you directly.</p>
+    </div>
+
+    <div class="marketplace-grid animate-on-scroll">
+      <!-- Listing form -->
+      <div class="marketplace-form-card">
+        <h3>📝 List Your Waste</h3>
+        <form id="sellWasteForm">
+          <div class="calc-input-group">
+            <label for="sellWasteType">Waste Type</label>
+            <select id="sellWasteType" class="mp-select" required>
+              <option value="">Select type</option>
+              <option value="plastic">🧴 Plastic</option>
+              <option value="paper">📰 Paper / Cardboard</option>
+              <option value="metal">🔩 Metal / Scrap</option>
+              <option value="ewaste">📱 E-Waste</option>
+              <option value="glass">🫙 Glass</option>
+              <option value="mixed">🗑️ Mixed / Other</option>
+            </select>
+          </div>
+          <div class="mp-row">
+            <div class="calc-input-group">
+              <label for="sellQuantity">Quantity (kg)</label>
+              <div class="input-with-unit"><input type="number" id="sellQuantity" min="1" placeholder="e.g. 10" required><span class="input-unit">KG</span></div>
+            </div>
+            <div class="calc-input-group">
+              <label for="sellPrice">Expected Price (optional)</label>
+              <div class="input-with-unit"><span class="input-unit">₹</span><input type="number" id="sellPrice" min="0" placeholder="Per kg"></div>
+            </div>
+          </div>
+          <div class="calc-input-group">
+            <label for="sellPhoto">Photo</label>
+            <input type="file" id="sellPhoto" accept="image/*" class="mp-file">
+          </div>
+          <div class="calc-input-group">
+            <label for="sellPhone">Contact Number (WhatsApp)</label>
+            <input type="tel" id="sellPhone" class="mp-text" placeholder="e.g. 98765xxxxx" required>
+          </div>
+          <button type="button" id="shareLocationBtn" class="btn btn-secondary btn-sm mp-location-btn">📍 Share My Location</button>
+          <span id="locationStatus" class="mp-location-status">Location not shared yet</span>
+          <button type="submit" id="sellSubmitBtn" class="btn btn-primary mp-submit-btn">List for Pickup</button>
+          <p id="sellFormMsg" class="mp-form-msg"></p>
+        </form>
+      </div>
+
+      <!-- Map + listings -->
+      <div class="marketplace-map-card">
+        <h3>📍 Nearby Listings</h3>
+        <div id="collectorMap" class="mp-map"></div>
+        <div id="sellListings" class="mp-listings-list">
+          <p class="mp-empty-state">Loading listings…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== NEW: FREE BIG ITEMS EXCHANGE ========== -->
+<section class="section free-items-section" id="free-items">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">🎁 Community Exchange</span>
+      <h2 class="section-title">Give Away Big Items for Free</h2>
+      <p class="section-subtitle">Got a table, bed, or iron rods you no longer need? Post it here instead of throwing it away — someone nearby might put it to good use.</p>
+    </div>
+
+    <div class="free-items-layout animate-on-scroll">
+      <div class="marketplace-form-card">
+        <h3>📤 Post an Item</h3>
+        <form id="freeItemForm">
+          <div class="calc-input-group">
+            <label for="freeItemName">Item Name</label>
+            <input type="text" id="freeItemName" class="mp-text" placeholder="e.g. Wooden Dining Table" required>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemCategory">Category</label>
+            <select id="freeItemCategory" class="mp-select" required>
+              <option value="">Select category</option>
+              <option value="furniture">🪑 Furniture</option>
+              <option value="appliance">🔌 Appliance</option>
+              <option value="metal">🔩 Metal / Iron Rods</option>
+              <option value="electronics">💻 Electronics</option>
+              <option value="other">📦 Other</option>
+            </select>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemPhoto">Photo (required)</label>
+            <input type="file" id="freeItemPhoto" accept="image/*" class="mp-file" required>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemArea">Area / Locality</label>
+            <input type="text" id="freeItemArea" class="mp-text" placeholder="e.g. Sector 22, Chandigarh" required>
+          </div>
+          <div class="calc-input-group">
+            <label for="freeItemPhone">Contact Number</label>
+            <input type="tel" id="freeItemPhone" class="mp-text" placeholder="e.g. 98765xxxxx" required>
+          </div>
+          <button type="submit" id="freeItemSubmitBtn" class="btn btn-primary mp-submit-btn">Post Item</button>
+          <p id="freeItemFormMsg" class="mp-form-msg"></p>
+        </form>
+      </div>
+
+      <div class="free-items-grid" id="freeItemsGrid">
+        <p class="mp-empty-state">Loading items…</p>
+      </div>
+    </div>
+  </div>
+</section>
