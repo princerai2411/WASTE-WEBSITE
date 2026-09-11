@@ -23,6 +23,7 @@
       <a href="#data" class="nav-link">Data</a>
       <a href="#marketplace" class="nav-link">Sell Waste</a>
       <a href="#free-items" class="nav-link">Free Items</a>
+      <a href="#welfare-network" class="nav-link">Welfare Connect</a>
       <a href="#calculator" class="nav-link">Calculator</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
@@ -603,6 +604,423 @@
 </section>
 
 
+<!-- ========== WELFARE & NGO CIRCULAR NETWORK ========== -->
+<section class="section welfare-section" id="welfare-network">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <span class="section-tag">🤝 Welfare &amp; NGO Network</span>
+      <h2 class="section-title">Doorstep Waste Collection &amp; Welfare NGO Hub</h2>
+      <p class="section-subtitle">Connect directly with welfare organizations for cloth recycling, food rescue, book drives, and e-waste management. Collection vehicles pick up from your doorstep, scan your household QR code, and credit Green Points to your personal record.</p>
+    </div>
+
+    <!-- Live Telemetry Banner -->
+    <div class="wn-telemetry-banner animate-on-scroll">
+      <div class="wn-telemetry-item">
+        <span class="wn-telemetry-val" id="wnStatDiverted">1,420 kg</span>
+        <span class="wn-telemetry-lbl">Waste Diverted to NGOs</span>
+      </div>
+      <div class="wn-telemetry-item">
+        <span class="wn-telemetry-val" id="wnStatPickups">86</span>
+        <span class="wn-telemetry-lbl">Verified Doorstep Pickups</span>
+      </div>
+      <div class="wn-telemetry-item">
+        <span class="wn-telemetry-val" id="wnStatNgos">6 Active</span>
+        <span class="wn-telemetry-lbl">Welfare NGO Partners</span>
+      </div>
+      <div class="wn-telemetry-item">
+        <span class="wn-telemetry-val" id="wnStatPoints">24,550</span>
+        <span class="wn-telemetry-lbl">Green Points Rewarded</span>
+      </div>
+    </div>
+
+    <!-- Role Switcher Tabs -->
+    <div class="wn-role-tabs animate-on-scroll">
+      <button class="wn-role-tab active" data-role="citizen" type="button">
+        <span class="tab-icon">🙋</span>
+        <span class="tab-text">Citizen Donation &amp; Wallet</span>
+      </button>
+      <button class="wn-role-tab" data-role="ngo" type="button">
+        <span class="tab-icon">🏢</span>
+        <span class="tab-text">NGO Welfare Portal</span>
+      </button>
+      <button class="wn-role-tab" data-role="driver" type="button">
+        <span class="tab-icon">🚚</span>
+        <span class="tab-text">Vehicle Driver &amp; QR Scanner</span>
+      </button>
+      <button class="wn-role-tab" data-role="ledger" type="button">
+        <span class="tab-icon">📜</span>
+        <span class="tab-text">Public ESG Audit Ledger</span>
+      </button>
+    </div>
+
+    <!-- Panel 1: Citizen View -->
+    <div class="wn-panel active" id="wnPanelCitizen">
+      <div class="wn-citizen-grid">
+        <!-- Left Column: Donation Form -->
+        <div class="marketplace-form-card">
+          <div class="card-title-row">
+            <h3>📦 Request Doorstep NGO Pickup</h3>
+            <span class="form-badge free-badge">Free NGO Collection</span>
+          </div>
+          <form id="wnListingForm">
+            <div class="calc-input-group">
+              <label for="wnWasteCategory">Donation / Waste Category</label>
+              <select id="wnWasteCategory" class="mp-select" required>
+                <option value="">Select waste type</option>
+                <option value="clothes">👕 Clothes &amp; Textiles (Refurbishing &amp; Distribution • 15 pts/kg)</option>
+                <option value="books">📚 Books, Notebooks &amp; Stationery (School Drives • 20 pts/kg)</option>
+                <option value="food">🍲 Surplus Cooked / Packaged Food (Hunger Relief • 25 pts/kg)</option>
+                <option value="ewaste">📱 Old Gadgets &amp; E-Waste (Safe Circular Recycling • 30 pts/kg)</option>
+                <option value="plastic">🧴 Segregated Clean Plastics (Eco-bricks &amp; Upcycling • 10 pts/kg)</option>
+                <option value="metal">🔩 Scrap Iron, Grills &amp; Utensils (Community Co-op • 12 pts/kg)</option>
+              </select>
+            </div>
+
+            <div class="mp-row">
+              <div class="calc-input-group">
+                <label for="wnQuantity">Estimated Weight (kg)</label>
+                <div class="input-with-unit">
+                  <input type="number" id="wnQuantity" min="1" step="0.5" placeholder="e.g. 10" required>
+                  <span class="input-unit">KG</span>
+                </div>
+              </div>
+              <div class="calc-input-group">
+                <label for="wnPickupSlot">Preferred Pickup Slot</label>
+                <select id="wnPickupSlot" class="mp-select" required>
+                  <option value="Today Evening (4 PM - 7 PM)">Today Evening (4 PM - 7 PM)</option>
+                  <option value="Tomorrow Morning (8 AM - 11 AM)">Tomorrow Morning (8 AM - 11 AM)</option>
+                  <option value="Tomorrow Afternoon (1 PM - 4 PM)">Tomorrow Afternoon (1 PM - 4 PM)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="calc-input-group">
+              <label for="wnAddress">Pickup Address &amp; Locality</label>
+              <input type="text" id="wnAddress" class="mp-text" placeholder="e.g. Flat 304, Green Heights, Indiranagar, Bengaluru" required>
+            </div>
+
+            <div class="mp-row">
+              <div class="calc-input-group">
+                <label for="wnPhone">WhatsApp Contact</label>
+                <div class="input-with-unit">
+                  <span class="input-unit">🇮🇳 +91</span>
+                  <input type="tel" id="wnPhone" class="mp-text" placeholder="9876543210" pattern="[0-9]{10}" required>
+                </div>
+              </div>
+              <div class="calc-input-group">
+                <label>GPS Location</label>
+                <button type="button" id="wnShareLocationBtn" class="btn btn-secondary btn-sm mp-location-btn" style="height:44px; margin-top:2px;">
+                  📍 <span id="wnLocationStatusText">Share Location</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Photo Upload Dropzone -->
+            <div class="calc-input-group">
+              <label>Photo of Donation/Waste (Optional)</label>
+              <div class="mp-upload-dropzone" id="wnDropzone">
+                <input type="file" id="wnPhoto" accept="image/*" class="mp-file-input">
+                <div class="dropzone-prompt" id="wnDropPrompt">
+                  <span class="dropzone-icon">📷</span>
+                  <span class="dropzone-text">Click or drag photo of items here</span>
+                  <small class="dropzone-sub">Helps NGOs prepare the right collection bags</small>
+                </div>
+                <div class="dropzone-preview" id="wnDropPreview" style="display:none;">
+                  <img id="wnPreviewImg" src="" alt="Donation preview">
+                  <button type="button" class="remove-photo-btn" id="wnRemovePhotoBtn" title="Remove photo">✕</button>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" id="wnSubmitBtn" class="btn btn-primary mp-submit-btn">
+              🚚 Schedule Pickup &amp; Generate Household QR
+            </button>
+            <p id="wnFormMsg" class="mp-form-msg"></p>
+          </form>
+        </div>
+
+        <!-- Right Column: Active Manifest Card + Green Wallet -->
+        <div class="wn-citizen-status-col">
+          <!-- Active Household Manifest Card -->
+          <div class="wn-manifest-card" id="wnActiveManifestCard">
+            <div class="manifest-card-header">
+              <div class="manifest-title-wrap">
+                <span class="manifest-tag">HOUSEHOLD PICKUP MANIFEST</span>
+                <h4 id="wnManifestCode">#WW-84912</h4>
+              </div>
+              <span class="wn-status-pill status-pending" id="wnManifestStatus">Awaiting NGO</span>
+            </div>
+
+            <div class="manifest-body">
+              <div class="manifest-details-grid">
+                <div><span class="m-label">Category:</span> <strong id="wnManifestCategory">👕 Clothes &amp; Textiles</strong></div>
+                <div><span class="m-label">Est. Weight:</span> <strong id="wnManifestWeight">12.0 kg</strong></div>
+                <div><span class="m-label">Est. Eco-Points:</span> <strong class="points-highlight" id="wnManifestEstPoints">+180 Pts</strong></div>
+                <div><span class="m-label">Pickup Slot:</span> <span id="wnManifestSlot">Today (4 PM - 7 PM)</span></div>
+              </div>
+
+              <!-- QR Code Container -->
+              <div class="qr-manifest-box">
+                <div class="qr-canvas-wrap" id="wnQrCodeDisplay"></div>
+                <div class="qr-scan-instructions">
+                  <strong>📲 Show this QR Code to Driver</strong>
+                  <p>When the collection vehicle arrives, driver will scan this QR to verify weight and instantly credit points.</p>
+                </div>
+              </div>
+
+              <!-- Vehicle & Driver Status Strip -->
+              <div class="assigned-vehicle-strip" id="wnVehicleStrip">
+                <div class="vehicle-icon-box">🚛</div>
+                <div class="vehicle-info-text">
+                  <strong id="wnAssignedDriver">Assigning Nearest Eco-Van…</strong>
+                  <span id="wnAssignedVehicle">Route optimizer is searching partner NGOs</span>
+                </div>
+                <a id="wnDriverWhatsappBtn" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-whatsapp" style="display:none;">
+                  <i class="fab fa-whatsapp"></i> Chat Driver
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- My Green Points Wallet Card -->
+          <div class="wn-wallet-card" id="wnWalletCard">
+            <div class="wallet-header">
+              <div class="wallet-title">
+                <span class="wallet-icon">🌱</span>
+                <div>
+                  <h4>My Green Points Wallet</h4>
+                  <small>Verified Circular Recycling Rewards</small>
+                </div>
+              </div>
+              <div class="wallet-balance">
+                <span class="balance-num" id="wnWalletPoints">450</span>
+                <span class="balance-unit">Points</span>
+              </div>
+            </div>
+
+            <div class="wallet-tier-bar">
+              <div class="tier-info">
+                <span>Tier: <strong id="wnWalletTier">🥈 Silver Eco-Hero</strong></span>
+                <span>Next Tier: <strong>500 Pts</strong></span>
+              </div>
+              <div class="tier-progress-track">
+                <div class="tier-progress-fill" id="wnWalletProgress" style="width: 90%;"></div>
+              </div>
+            </div>
+
+            <div class="wallet-perks">
+              <h5>🎁 Redeemable Rewards</h5>
+              <div class="perks-grid">
+                <div class="perk-card">
+                  <span class="perk-emoji">🚌</span>
+                  <strong>₹50 Metro/Bus Card</strong>
+                  <button class="btn btn-sm btn-secondary perk-redeem-btn" data-cost="250" type="button">Redeem (250 Pts)</button>
+                </div>
+                <div class="perk-card">
+                  <span class="perk-emoji">🌳</span>
+                  <strong>Plant Native Tree</strong>
+                  <button class="btn btn-sm btn-secondary perk-redeem-btn" data-cost="350" type="button">Redeem (350 Pts)</button>
+                </div>
+                <div class="perk-card">
+                  <span class="perk-emoji">🛍️</span>
+                  <strong>Jute Bag &amp; Seeds Kit</strong>
+                  <button class="btn btn-sm btn-secondary perk-redeem-btn" data-cost="400" type="button">Redeem (400 Pts)</button>
+                </div>
+              </div>
+              <div id="wnRedeemMsg" class="mp-form-msg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: NGO View -->
+    <div class="wn-panel" id="wnPanelNGO">
+      <div class="ngo-portal-container">
+        <!-- NGO Header & Selector -->
+        <div class="ngo-portal-header">
+          <div class="ngo-selector-wrap">
+            <label for="wnNgoSelect"><strong>Select Welfare Organization Portal:</strong></label>
+            <select id="wnNgoSelect" class="mp-select">
+              <option value="ngo-1">👕 Goonj – Cloth &amp; Textile Circularity (Bangalore Central)</option>
+              <option value="ngo-2">🍲 Robin Hood Army – Surplus Food Rescue (Koramangala Hub)</option>
+              <option value="ngo-3">📚 Nanhi Jaan – Children's Books &amp; Stationery Drive</option>
+              <option value="ngo-4">📱 Chintan – E-Waste Circularity &amp; Recycling Center</option>
+              <option value="ngo-5">🧴 Saahas Zero Waste – Community Plastic Recovery</option>
+            </select>
+          </div>
+          <div class="ngo-stats-strip" id="wnNgoStatsStrip">
+            <div class="ngo-stat-pill">📦 Total Received: <strong id="wnNgoTotalKg">580 kg</strong></div>
+            <div class="ngo-stat-pill">🚚 Active Pickups: <strong id="wnNgoActiveCount">2</strong></div>
+            <div class="ngo-stat-pill">👥 Beneficiaries: <strong id="wnNgoBeneficiaries">340 Families</strong></div>
+          </div>
+        </div>
+
+        <div class="ngo-portal-grid">
+          <!-- Left: Inward Citizen Listings -->
+          <div class="ngo-feed-col">
+            <div class="col-header-bar">
+              <h4>📋 Pending Citizen Donations For This Category</h4>
+              <small>Review listings and dispatch available collection vehicle</small>
+            </div>
+            <div class="ngo-listings-feed" id="wnNgoListingsFeed">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Right: NGO Inward Delivery History -->
+          <div class="ngo-history-col">
+            <div class="col-header-bar">
+              <h4>🏛️ Inward NGO Inventory &amp; ESG Record</h4>
+              <small>Officially verified doorstep deliveries received</small>
+            </div>
+            <div class="ngo-inventory-table-wrap">
+              <table class="wn-table" id="wnNgoInventoryTable">
+                <thead>
+                  <tr>
+                    <th>Manifest #</th>
+                    <th>Waste Type</th>
+                    <th>Weight</th>
+                    <th>Source Area</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="wnNgoInventoryBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Driver View -->
+    <div class="wn-panel" id="wnPanelDriver">
+      <div class="driver-portal-container">
+        <!-- Driver Profile Bar -->
+        <div class="driver-profile-card">
+          <div class="driver-profile-info">
+            <div class="driver-avatar">👨‍✈️</div>
+            <div>
+              <h4 id="wnDriverName">Rajesh Kumar</h4>
+              <span class="driver-vehicle-badge">🚐 Tata Ace EV (#KA-03-EV-1024)</span>
+              <span class="driver-telemetry">🔋 Battery: 84% • Today's Route: Bangalore Central &amp; East</span>
+            </div>
+          </div>
+          <div class="driver-stats">
+            <div class="driver-stat-box"><strong>6</strong><span>Pickups Today</span></div>
+            <div class="driver-stat-box"><strong>82 kg</strong><span>Weight Collected</span></div>
+          </div>
+        </div>
+
+        <div class="driver-layout-grid">
+          <!-- Left: Assigned Pickup Manifests -->
+          <div class="driver-route-col">
+            <div class="col-header-bar">
+              <h4>📍 Assigned Route Pickups</h4>
+              <small>Click "Arrived at Doorstep" to open QR scanner and confirm handover</small>
+            </div>
+            <div class="driver-manifests-list" id="wnDriverManifestsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Right: Doorstep QR Verification Chamber -->
+          <div class="driver-scanner-col">
+            <div class="scanner-card">
+              <div class="scanner-card-header">
+                <h4>📷 Doorstep QR Verification</h4>
+                <span class="live-pulse-badge">Scanner Active</span>
+              </div>
+              <p class="scanner-tip">Scan the resident's phone screen or printed Household QR code to certify handover.</p>
+
+              <!-- Viewfinder Box -->
+              <div class="scanner-viewfinder-box">
+                <div class="viewfinder-frame">
+                  <div class="corner corner-tl"></div>
+                  <div class="corner corner-tr"></div>
+                  <div class="corner corner-bl"></div>
+                  <div class="corner corner-br"></div>
+                  <div class="scanner-scanline"></div>
+                  <div class="viewfinder-inner-text" id="wnScannerStatusText">
+                    Point camera at Resident's QR Code or click Instant Verify below
+                  </div>
+                </div>
+              </div>
+
+              <!-- Selected Item for verification -->
+              <div class="verification-controls-box" id="wnVerificationControls">
+                <div class="verif-target-info" id="wnVerifTargetInfo">
+                  <span>Selected Pickup:</span>
+                  <strong id="wnVerifManifestCode">Select a pickup from the list</strong>
+                </div>
+
+                <div class="calc-input-group" style="margin-top:10px;">
+                  <label for="wnActualWeightInput">Actual Measured Weight on Portable Scale (kg):</label>
+                  <div class="input-with-unit">
+                    <input type="number" id="wnActualWeightInput" min="0.5" step="0.5" placeholder="e.g. 12.0">
+                    <span class="input-unit">KG</span>
+                  </div>
+                </div>
+
+                <div class="verif-action-buttons">
+                  <button type="button" class="btn btn-primary btn-scanner-action" id="wnInstantScanBtn">
+                    ⚡ Instant Doorstep QR Scan &amp; Verify
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-scanner-action" id="wnCameraScanBtn">
+                    📹 Open Device Camera
+                  </button>
+                </div>
+                <p id="wnDriverScanMsg" class="mp-form-msg"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 4: Public ESG Audit Ledger -->
+    <div class="wn-panel" id="wnPanelLedger">
+      <div class="ledger-portal-container">
+        <div class="ledger-header-row">
+          <div>
+            <h3>📜 Public Blockchain-Style ESG Impact Ledger</h3>
+            <p>Immutable, open audit trail of all verified doorstep collections, diverted kilograms, and citizen Green Points awarded.</p>
+          </div>
+          <div class="ledger-search-box">
+            <input type="text" id="wnLedgerSearch" class="mp-search-input" placeholder="🔍 Search by Manifest ID, NGO, or Area...">
+          </div>
+        </div>
+
+        <div class="ledger-table-container">
+          <table class="wn-table" id="wnPublicLedgerTable">
+            <thead>
+              <tr>
+                <th>Manifest ID</th>
+                <th>Timestamp</th>
+                <th>Waste Category</th>
+                <th>Verified Kg</th>
+                <th>Welfare NGO</th>
+                <th>Eco-Vehicle</th>
+                <th>Points Minted</th>
+                <th>Verification Hash</th>
+              </tr>
+            </thead>
+            <tbody id="wnPublicLedgerBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
 <!-- ========== CALCULATOR ========== -->
 <section class="section calculator-section" id="calculator">
   <div class="container">
@@ -657,6 +1075,7 @@
         <a href="#about">About SWM</a>
         <a href="#game">Play Game</a>
         <a href="#data">View Data</a>
+        <a href="#welfare-network">Welfare Connect</a>
         <a href="#calculator">Calculator</a>
       </div>
       <div class="footer-col">
@@ -673,6 +1092,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 <script src="supabase-client.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="marketplace.js"></script>
+<script src="welfare-network.js"></script>
 </body>
 </html>
