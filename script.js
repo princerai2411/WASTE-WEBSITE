@@ -6,14 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavbar();
     initScrollAnimations();
     initCounters();
-    initGame();
+    initEcoArcade();
     initCharts();
     initCalculator();
-    initLiveCounter();
-    initCityComparison();
-    initWasteToMoney();
-    initQuiz();
-    initTipOfDay();
 });
 
 /* ========== NAVBAR ========== */
@@ -107,32 +102,64 @@ function initCounters() {
     }
 }
 
-/* ========== DRAG & DROP GAME ========== */
-function initGame() {
+/* ========== ECO GAMES ARCADE ========== */
+function initEcoArcade() {
+    initGameTabs();
+    initBinSegregator();
+    initConveyorRush();
+    initDecompositionDetective();
+    initEcoCityTycoon();
+}
+
+/* --- Tabs Controller --- */
+function initGameTabs() {
+    const tabBtns = document.querySelectorAll('.game-tab-btn');
+    const panels = document.querySelectorAll('.game-panel');
+    if (!tabBtns.length) return;
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetGame = btn.dataset.game;
+            tabBtns.forEach(b => b.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            const targetPanel = document.getElementById('gamePanel-' + targetGame);
+            if (targetPanel) targetPanel.classList.add('active');
+        });
+    });
+}
+
+/* ========== GAME 1: BIN SEGREGATOR (Drag & Tap) ========== */
+function initBinSegregator() {
     const wasteItems = [
-        { name: 'Banana Peel', emoji: '🍌', bin: 'wet' },
-        { name: 'Apple Core', emoji: '🍎', bin: 'wet' },
-        { name: 'Vegetable Scraps', emoji: '🥕', bin: 'wet' },
-        { name: 'Tea Leaves', emoji: '🍵', bin: 'wet' },
-        { name: 'Egg Shells', emoji: '🥚', bin: 'wet' },
-        { name: 'Plastic Bottle', emoji: '🧴', bin: 'dry' },
-        { name: 'Newspaper', emoji: '📰', bin: 'dry' },
-        { name: 'Cardboard Box', emoji: '📦', bin: 'dry' },
-        { name: 'Metal Can', emoji: '🥫', bin: 'dry' },
-        { name: 'Glass Jar', emoji: '🫙', bin: 'dry' },
-        { name: 'Battery', emoji: '🔋', bin: 'hazardous' },
-        { name: 'Paint Can', emoji: '🎨', bin: 'hazardous' },
-        { name: 'Medicine', emoji: '💊', bin: 'hazardous' },
-        { name: 'Light Bulb', emoji: '💡', bin: 'hazardous' },
+        { name: 'Banana Peel', emoji: '🍌', bin: 'wet', fact: 'Organic waste decomposes in 2-4 weeks and turns into nutrient-dense compost for agriculture.' },
+        { name: 'Plastic Bottle', emoji: '🧴', bin: 'dry', fact: 'PET plastic takes 450 years to decompose in landfills, but can be recycled into polyester yarn and jackets!' },
+        { name: 'Newspaper', emoji: '📰', bin: 'dry', fact: 'Recycling 1 ton of paper saves 17 trees, 7,000 gallons of water, and 4,000 kWh of electricity.' },
+        { name: 'Used AA Battery', emoji: '🔋', bin: 'hazardous', fact: 'Batteries contain heavy metals like cadmium and lead that leach into groundwater if thrown in normal bins.' },
+        { name: 'Apple Core', emoji: '🍎', bin: 'wet', fact: 'Food scraps make up ~50% of municipal solid waste in India. Segregating wet waste prevents toxic landfill fires.' },
+        { name: 'Glass Soda Bottle', emoji: '🍾', bin: 'dry', fact: 'Glass can be recycled indefinitely without any loss in purity, strength, or clarity.' },
+        { name: 'Expired Medicine', emoji: '💊', bin: 'hazardous', fact: 'Medicines must be treated as hazardous biomedical waste to prevent antibiotic resistance in soil and water.' },
+        { name: 'Cardboard Box', emoji: '📦', bin: 'dry', fact: 'Cardboard is among the easiest packaging materials to pulp and remanufacture into new shipping boxes.' },
+        { name: 'Fluorescent Bulb', emoji: '💡', bin: 'hazardous', fact: 'CFLs and tube lights contain mercury vapor; always dispose of them at designated hazardous drop-offs.' },
+        { name: 'Vegetable Peels', emoji: '🥕', bin: 'wet', fact: 'Kitchen vegetable peels can generate biogas for clean cooking energy or vermicompost for gardens.' },
+        { name: 'Aluminium Can', emoji: '🥫', bin: 'dry', fact: 'Recycling aluminium saves 95% of the energy needed to smelt new aluminium from raw bauxite ore!' },
+        { name: 'Broken Phone Cable', emoji: '🔌', bin: 'hazardous', fact: 'E-waste wires contain valuable copper and rare metals, but toxic PVC insulation needs specialized recycling.' }
     ];
 
-    let score = 0, correct = 0, wrong = 0;
+    let score = 0, correct = 0, wrong = 0, streak = 0;
+    let selectedItem = null;
+
     const itemsContainer = document.getElementById('gameItems');
     const scoreEl = document.getElementById('gameScore');
     const correctEl = document.getElementById('correctCount');
     const wrongEl = document.getElementById('wrongCount');
+    const streakEl = document.getElementById('streakCount');
     const feedbackEl = document.getElementById('gameFeedback');
+    const factTickerEl = document.getElementById('gameFactTicker');
     const resetBtn = document.getElementById('resetGame');
+
+    if (!itemsContainer) return;
 
     function shuffle(arr) {
         const a = [...arr];
@@ -145,6 +172,7 @@ function initGame() {
 
     function renderItems() {
         itemsContainer.innerHTML = '';
+        selectedItem = null;
         const shuffled = shuffle(wasteItems);
         shuffled.forEach((item, i) => {
             const el = document.createElement('div');
@@ -152,124 +180,73 @@ function initGame() {
             el.draggable = true;
             el.dataset.bin = item.bin;
             el.dataset.name = item.name;
+            el.dataset.fact = item.fact;
             el.id = 'item-' + i;
             el.innerHTML = `<span class="item-emoji">${item.emoji}</span> ${item.name}`;
 
+            // Drag support
             el.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', JSON.stringify({
-                    id: el.id, bin: item.bin, name: item.name
+                    id: el.id, bin: item.bin, name: item.name, fact: item.fact
                 }));
                 el.style.opacity = '0.4';
             });
             el.addEventListener('dragend', () => { el.style.opacity = '1'; });
 
-            // Touch support
-            el.addEventListener('touchstart', handleTouchStart, { passive: false });
-            el.addEventListener('touchmove', handleTouchMove, { passive: false });
-            el.addEventListener('touchend', handleTouchEnd, { passive: false });
+            // Tap-to-select support (mobile & desktop click)
+            el.addEventListener('click', () => {
+                if (selectedItem === el) {
+                    el.classList.remove('selected');
+                    selectedItem = null;
+                } else {
+                    document.querySelectorAll('.game-item').forEach(it => it.classList.remove('selected'));
+                    el.classList.add('selected');
+                    selectedItem = el;
+                    showFeedback(`👉 Selected "${item.name}". Now tap the correct bin below!`, 'correct');
+                }
+            });
 
             itemsContainer.appendChild(el);
         });
     }
 
-    // Touch drag support
-    let touchDragItem = null;
-    let touchClone = null;
-    let touchData = null;
-
-    function handleTouchStart(e) {
-        e.preventDefault();
-        touchDragItem = e.currentTarget;
-        touchData = {
-            id: touchDragItem.id,
-            bin: touchDragItem.dataset.bin,
-            name: touchDragItem.dataset.name
-        };
-        touchDragItem.style.opacity = '0.4';
-
-        touchClone = touchDragItem.cloneNode(true);
-        touchClone.style.position = 'fixed';
-        touchClone.style.pointerEvents = 'none';
-        touchClone.style.zIndex = '10000';
-        touchClone.style.opacity = '0.85';
-        touchClone.style.transform = 'scale(1.1)';
-        document.body.appendChild(touchClone);
-
-        const touch = e.touches[0];
-        touchClone.style.left = (touch.clientX - 60) + 'px';
-        touchClone.style.top = (touch.clientY - 25) + 'px';
-    }
-
-    function handleTouchMove(e) {
-        e.preventDefault();
-        if (!touchClone) return;
-        const touch = e.touches[0];
-        touchClone.style.left = (touch.clientX - 60) + 'px';
-        touchClone.style.top = (touch.clientY - 25) + 'px';
-
-        // Highlight bins on hover
-        document.querySelectorAll('.bin').forEach(bin => {
-            const rect = bin.getBoundingClientRect();
-            if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
-                touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-                bin.classList.add('drag-over');
-            } else {
-                bin.classList.remove('drag-over');
-            }
-        });
-    }
-
-    function handleTouchEnd(e) {
-        e.preventDefault();
-        if (!touchClone || !touchDragItem || !touchData) return;
-
-        const touch = e.changedTouches[0];
-        let droppedBin = null;
-
-        document.querySelectorAll('.bin').forEach(bin => {
-            const rect = bin.getBoundingClientRect();
-            if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
-                touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-                droppedBin = bin.dataset.bin;
-            }
-            bin.classList.remove('drag-over');
-        });
-
-        if (droppedBin) {
-            processDropResult(touchData.bin, droppedBin, touchData.name, touchDragItem);
-        }
-
-        touchDragItem.style.opacity = '1';
-        touchClone.remove();
-        touchClone = null;
-        touchDragItem = null;
-        touchData = null;
-    }
-
-    // Setup bin drop zones
-    document.querySelectorAll('.bin').forEach(bin => {
-        bin.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            bin.classList.add('drag-over');
-        });
-        bin.addEventListener('dragleave', () => {
-            bin.classList.remove('drag-over');
-        });
+    // Bins click & drop
+    document.querySelectorAll('#gamePanel-segregator .bin').forEach(bin => {
+        // Drag events
+        bin.addEventListener('dragover', (e) => { e.preventDefault(); bin.classList.add('drag-over'); });
+        bin.addEventListener('dragleave', () => { bin.classList.remove('drag-over'); });
         bin.addEventListener('drop', (e) => {
             e.preventDefault();
             bin.classList.remove('drag-over');
-            const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-            const droppedBin = bin.dataset.bin;
-            const itemEl = document.getElementById(data.id);
-            processDropResult(data.bin, droppedBin, data.name, itemEl);
+            try {
+                const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                const itemEl = document.getElementById(data.id);
+                processDrop(data.bin, bin.dataset.bin, data.name, data.fact, itemEl);
+            } catch (err) { console.error(err); }
+        });
+
+        // Tap-to-sort click
+        bin.addEventListener('click', () => {
+            if (selectedItem) {
+                const correctBin = selectedItem.dataset.bin;
+                const itemName = selectedItem.dataset.name;
+                const fact = selectedItem.dataset.fact;
+                const targetBin = bin.dataset.bin;
+                const el = selectedItem;
+                selectedItem = null;
+                processDrop(correctBin, targetBin, itemName, fact, el);
+            }
         });
     });
 
-    function processDropResult(correctBin, droppedBin, itemName, itemEl) {
+    function processDrop(correctBin, droppedBin, itemName, fact, itemEl) {
         if (correctBin === droppedBin) {
             correct++;
-            score += 10;
-            showFeedback(`✅ Correct! "${itemName}" belongs in ${getBinName(correctBin)}.`, 'correct');
+            streak++;
+            const pointsEarned = 10 + Math.min(streak * 2, 20);
+            score += pointsEarned;
+            showFeedback(`✅ Spot on! "${itemName}" belongs in ${getBinName(correctBin)} (+${pointsEarned} pts).`, 'correct');
+            if (fact && factTickerEl) factTickerEl.innerHTML = `💡 <strong>Recycling Fact:</strong> ${fact}`;
             if (itemEl) {
                 itemEl.style.transition = 'all 0.3s ease';
                 itemEl.style.transform = 'scale(0)';
@@ -278,20 +255,18 @@ function initGame() {
             }
         } else {
             wrong++;
+            streak = 0;
             score = Math.max(0, score - 5);
-            showFeedback(`❌ Wrong! "${itemName}" should go in ${getBinName(correctBin)}, not ${getBinName(droppedBin)}.`, 'wrong');
+            showFeedback(`❌ Oops! "${itemName}" goes into ${getBinName(correctBin)}, not ${getBinName(droppedBin)}.`, 'wrong');
         }
         updateScore();
 
-        // Check if all items sorted
         setTimeout(() => {
             const remaining = itemsContainer.querySelectorAll('.game-item');
             if (remaining.length === 0) {
-                showFeedback(`🎉 Congratulations! You sorted all items! Final Score: ${score}`, 'correct');
+                showFeedback(`🎉 Awesome job! You sorted every single item! Final Score: ${score}`, 'correct');
             }
-            // Update achievement badge
-            updateBadge(score, correct, wrong, remaining.length === 0);
-        }, 400);
+        }, 350);
     }
 
     function getBinName(bin) {
@@ -313,18 +288,543 @@ function initGame() {
         scoreEl.textContent = score;
         correctEl.textContent = correct;
         wrongEl.textContent = wrong;
+        if (streakEl) streakEl.textContent = `${streak} 🔥`;
     }
 
-    resetBtn.addEventListener('click', () => {
-        score = 0; correct = 0; wrong = 0;
-        updateScore();
-        feedbackEl.textContent = '';
-        feedbackEl.className = 'game-feedback';
-        renderItems();
-    });
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            score = 0; correct = 0; wrong = 0; streak = 0;
+            updateScore();
+            feedbackEl.textContent = '';
+            feedbackEl.className = 'game-feedback';
+            renderItems();
+        });
+    }
 
     renderItems();
 }
+
+/* ========== GAME 2: CONVEYOR RUSH (Speed Sorting) ========== */
+function initConveyorRush() {
+    const rushItems = [
+        { name: 'Water Bottle', emoji: '🧴', bin: 'dry' },
+        { name: 'Banana Skin', emoji: '🍌', bin: 'wet' },
+        { name: 'Car Battery', emoji: '🔋', bin: 'hazardous' },
+        { name: 'Pizza Cardboard', emoji: '📦', bin: 'dry' },
+        { name: 'Egg Shells', emoji: '🥚', bin: 'wet' },
+        { name: 'Broken Phone', emoji: '📱', bin: 'hazardous' },
+        { name: 'Soda Can', emoji: '🥫', bin: 'dry' },
+        { name: 'Orange Peels', emoji: '🍊', bin: 'wet' },
+        { name: 'Fluorescent Tube', emoji: '💡', bin: 'hazardous' },
+        { name: 'Magazine Paper', emoji: '📰', bin: 'dry' },
+        { name: 'Tea Leaves', emoji: '🍂', bin: 'wet' },
+        { name: 'Chemical Bottle', emoji: '🧪', bin: 'hazardous' },
+        { name: 'Glass Tumbler', emoji: '🫙', bin: 'dry' },
+        { name: 'Bread Crusts', emoji: '🍞', bin: 'wet' },
+        { name: 'Thermometer', emoji: '🌡️', bin: 'hazardous' },
+        { name: 'Milk Carton', emoji: '🥛', bin: 'dry' },
+        { name: 'Watermelon Rind', emoji: '🍉', bin: 'wet' },
+        { name: 'Lead Paint Can', emoji: '🎨', bin: 'hazardous' }
+    ];
+
+    let timer = 30;
+    let score = 0;
+    let streak = 0;
+    let timerInterval = null;
+    let isPlaying = false;
+    let currentItem = null;
+
+    const stage = document.getElementById('rushItemStage');
+    const timerEl = document.getElementById('rushTimer');
+    const scoreEl = document.getElementById('rushScore');
+    const multEl = document.getElementById('rushMultiplier');
+    const startBtn = document.getElementById('startRushBtn');
+
+    if (!stage || !startBtn) return;
+
+    startBtn.addEventListener('click', startRushGame);
+
+    function startRushGame() {
+        isPlaying = true;
+        timer = 30;
+        score = 0;
+        streak = 0;
+        updateRushStats();
+
+        nextItem();
+
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            timer--;
+            timerEl.textContent = timer + 's';
+            if (timer <= 0) {
+                endRushGame();
+            }
+        }, 1000);
+    }
+
+    function nextItem() {
+        if (!isPlaying) return;
+        const rand = rushItems[Math.floor(Math.random() * rushItems.length)];
+        currentItem = rand;
+        stage.innerHTML = `
+            <div class="rush-active-item">
+                <div class="rush-item-emoji">${rand.emoji}</div>
+                <div class="rush-item-title">${rand.name}</div>
+            </div>`;
+    }
+
+    function handleBinChoice(chosenBin) {
+        if (!isPlaying || !currentItem) return;
+
+        if (chosenBin === currentItem.bin) {
+            streak++;
+            const mult = streak >= 8 ? 4 : streak >= 4 ? 2 : 1;
+            score += 15 * mult;
+            stage.classList.add('flash-correct');
+            setTimeout(() => stage.classList.remove('flash-correct'), 200);
+        } else {
+            streak = 0;
+            score = Math.max(0, score - 10);
+            stage.classList.add('flash-wrong');
+            setTimeout(() => stage.classList.remove('flash-wrong'), 200);
+        }
+
+        updateRushStats();
+        nextItem();
+    }
+
+    function updateRushStats() {
+        if (scoreEl) scoreEl.textContent = score;
+        const mult = streak >= 8 ? 4 : streak >= 4 ? 2 : 1;
+        if (multEl) multEl.textContent = mult + 'x (' + streak + ' streak)';
+    }
+
+    function endRushGame() {
+        isPlaying = false;
+        clearInterval(timerInterval);
+        const rank = score >= 350 ? '🏆 Speed Sorting Legend!' : score >= 200 ? '⚡ Rapid Sorter Pro' : '🌱 Green Trainee';
+        stage.innerHTML = `
+            <div class="rush-idle-msg">
+                <h3>🏁 Time Up! Final Score: ${score}</h3>
+                <p>Rank: <strong>${rank}</strong><br>Sorted rapidly to keep Indian landfills free of mixed contamination.</p>
+                <button class="btn btn-primary" id="retryRushBtn" type="button">🔄 Play Again</button>
+            </div>`;
+        const retry = document.getElementById('retryRushBtn');
+        if (retry) retry.addEventListener('click', startRushGame);
+    }
+
+    // Buttons
+    ['Wet', 'Dry', 'Hazard'].forEach((type) => {
+        const btn = document.getElementById('rushBtn' + type);
+        const binType = type === 'Wet' ? 'wet' : type === 'Dry' ? 'dry' : 'hazardous';
+        if (btn) btn.addEventListener('click', () => handleBinChoice(binType));
+    });
+
+    // Keyboard support: 1, 2, 3
+    window.addEventListener('keydown', (e) => {
+        if (!isPlaying) return;
+        if (e.key === '1') handleBinChoice('wet');
+        if (e.key === '2') handleBinChoice('dry');
+        if (e.key === '3') handleBinChoice('hazardous');
+    });
+}
+
+/* ========== GAME 3: DECOMPOSITION DETECTIVE ========== */
+function initDecompositionDetective() {
+    const detectiveData = [
+        {
+            name: 'Banana Peel',
+            emoji: '🍌',
+            options: ['2 to 4 Weeks', '2 Years', '10 Years', '25 Years'],
+            correct: 0,
+            lifespan: '2 to 4 Weeks',
+            meterPercent: 5,
+            fact: 'Banana peels break down rapidly because they are rich in nitrogen, water, and organic plant cells. In home composting, they turn into black gold for your garden in less than a month!'
+        },
+        {
+            name: 'Newspaper',
+            emoji: '📰',
+            options: ['6 Weeks', '1 Year', '5 Years', '20 Years'],
+            correct: 0,
+            lifespan: '6 Weeks',
+            meterPercent: 8,
+            fact: 'Paper cellulose breaks down quickly when exposed to moisture and air. However, packed tightly in oxygen-deprived landfills, unsegregated newspapers have been found readable after 50 years!'
+        },
+        {
+            name: 'Cigarette Butt',
+            emoji: '🚬',
+            options: ['3 Months', '10 to 12 Years', '50 Years', '100 Years'],
+            correct: 1,
+            lifespan: '10 to 12 Years',
+            meterPercent: 30,
+            fact: 'Cigarette filters are NOT cotton—they are made of cellulose acetate, a non-biodegradable plastic that leaches nicotine, arsenic, and microplastics into stormwater drains and city rivers.'
+        },
+        {
+            name: 'Aluminium Beverage Can',
+            emoji: '🥫',
+            options: ['5 Years', '20 Years', '80 to 200 Years', '500 Years'],
+            correct: 2,
+            lifespan: '80 to 200 Years',
+            meterPercent: 55,
+            fact: 'Aluminium oxidizes very slowly. But recycling just 1 can saves enough electricity to power an LED television for 3 full hours. It can be back on a store shelf as a new can in just 60 days!'
+        },
+        {
+            name: 'Plastic Water Bottle (PET)',
+            emoji: '🧴',
+            options: ['10 Years', '50 Years', '150 Years', '450 Years'],
+            correct: 3,
+            lifespan: '450 Years',
+            meterPercent: 78,
+            fact: 'Petroleum-based PET polymers never truly decompose biologically—sunlight only photo-degrades them into microscopic toxic particles that enter fish, farm soil, and human drinking water.'
+        },
+        {
+            name: 'Disposable Baby Diaper',
+            emoji: '👶',
+            options: ['5 Years', '50 Years', '200 Years', '500 Years'],
+            correct: 3,
+            lifespan: '500 Years',
+            meterPercent: 85,
+            fact: 'Single-use diapers contain superabsorbent polymers, polyethylene film, and polypropylene that persist for five centuries. India generates thousands of tons of diaper waste daily.'
+        },
+        {
+            name: 'Alkaline Battery',
+            emoji: '🔋',
+            options: ['1 Year', '10 Years', '100 Years', 'Never'],
+            correct: 2,
+            lifespan: '100 Years',
+            meterPercent: 65,
+            fact: 'The metal casing takes ~100 years to corrode, during which dangerous potassium hydroxide and heavy metals contaminate surrounding soil and groundwater.'
+        },
+        {
+            name: 'Glass Soda Bottle',
+            emoji: '🍾',
+            options: ['100 Years', '1,000 Years', '10,000 Years', '1 Million+ Years (Never)'],
+            correct: 3,
+            lifespan: '1,000,000+ Years',
+            meterPercent: 100,
+            fact: 'Made from liquid quartz sand, glass virtually never biodegrades in a landfill. The good news? Glass is 100% infinitely recyclable without any quality degradation.'
+        }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+
+    const stepEl = document.getElementById('detectiveStep');
+    const scoreEl = document.getElementById('detectiveScore');
+    const iconEl = document.getElementById('detectiveIcon');
+    const nameEl = document.getElementById('detectiveName');
+    const optionsContainer = document.getElementById('detectiveOptions');
+    const revealCard = document.getElementById('detectiveReveal');
+    const resultText = document.getElementById('detectiveResultText');
+    const meterBar = document.getElementById('detectiveMeterBar');
+    const factText = document.getElementById('detectiveFactText');
+    const nextBtn = document.getElementById('detectiveNextBtn');
+
+    if (!stepEl || !optionsContainer) return;
+
+    function renderQuestion() {
+        const item = detectiveData[currentIndex];
+        stepEl.textContent = `Item ${currentIndex + 1} of ${detectiveData.length}`;
+        iconEl.textContent = item.emoji;
+        nameEl.textContent = item.name;
+        revealCard.style.display = 'none';
+        optionsContainer.innerHTML = '';
+
+        item.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'detective-opt-btn';
+            btn.type = 'button';
+            btn.textContent = opt;
+            btn.addEventListener('click', () => handleGuess(idx, btn));
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function handleGuess(selectedIdx, btnEl) {
+        const item = detectiveData[currentIndex];
+        const allBtns = optionsContainer.querySelectorAll('.detective-opt-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        const isCorrect = selectedIdx === item.correct;
+        if (isCorrect) {
+            score++;
+            btnEl.classList.add('correct');
+            resultText.innerHTML = `🎉 <span style="color:#2e7d32;">Spot On!</span> Real Lifespan: <strong>${item.lifespan}</strong>`;
+        } else {
+            btnEl.classList.add('wrong');
+            allBtns[item.correct].classList.add('correct');
+            resultText.innerHTML = `⚠️ <span style="color:#c62828;">Surprise!</span> It actually takes: <strong>${item.lifespan}</strong>`;
+        }
+
+        if (scoreEl) scoreEl.textContent = score;
+        meterBar.style.width = item.meterPercent + '%';
+        factText.textContent = item.fact;
+        revealCard.style.display = 'block';
+
+        if (currentIndex === detectiveData.length - 1) {
+            nextBtn.textContent = '🏁 View Final Assessment';
+        } else {
+            nextBtn.textContent = 'Next Item ➔';
+        }
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < detectiveData.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                showFinalSummary();
+            }
+        });
+    }
+
+    function showFinalSummary() {
+        const detectiveBody = document.querySelector('.detective-body');
+        const badge = score >= 7 ? '🎖️ Master Degradation Sleuth' : score >= 5 ? '🔎 Keen Eco Investigator' : '📚 Waste Apprentice';
+        detectiveBody.innerHTML = `
+            <div style="text-align:center; padding: 24px;">
+                <div style="font-size:3.5rem; margin-bottom:12px;">🕵️‍♂️</div>
+                <h3 style="color:var(--green-dark); font-size:1.6rem;">${badge}</h3>
+                <p style="margin: 12px 0 24px; color:var(--gray-600); font-size:1.05rem;">
+                    You scored <strong>${score} out of ${detectiveData.length}</strong>! Understanding waste degradation timelines is the secret to knowing why immediate segregation and recycling are so vital.
+                </p>
+                <button class="btn btn-primary" id="restartDetectiveBtn" type="button">🔁 Try Detective Challenge Again</button>
+            </div>`;
+        const restart = document.getElementById('restartDetectiveBtn');
+        if (restart) restart.addEventListener('click', () => {
+            currentIndex = 0;
+            score = 0;
+            if (scoreEl) scoreEl.textContent = '0';
+            location.reload();
+        });
+    }
+
+    renderQuestion();
+}
+
+/* ========== GAME 4: ECO-CITY TYCOON (Municipal Simulator) ========== */
+function initEcoCityTycoon() {
+    const rounds = [
+        {
+            title: 'Round 1: The Collection Dilemma',
+            event: 'Unsegregated Central Dump Crisis',
+            desc: '60% of city trash arrives completely mixed at the overburdened outer landfill. Neighborhoods are complaining about smoke and groundwater contamination.',
+            choices: [
+                {
+                    title: 'Mandate 2-Bin Door-to-Door Segregation',
+                    desc: 'Issue color-coded green & blue bins with fines for mixed trash.',
+                    cost: '-₹18 Cr Budget',
+                    effect: { budget: -18, clean: +25, eco: +30, jobs: +450 },
+                    feedback: 'Great vision! 2-bin segregation clean rates surged, keeping 4,000 tons of wet waste out of the dump.'
+                },
+                {
+                    title: 'Buy Heavy Hydraulic Mixed Trash Compactors',
+                    desc: 'Faster collection speed, but dumps all waste together indiscriminately.',
+                    cost: '-₹10 Cr Budget',
+                    effect: { budget: -10, clean: +15, eco: -15, jobs: +50 },
+                    feedback: 'Streets look cleaner temporarily, but landfill fires worsened and recycling recovery fell by 40%.'
+                },
+                {
+                    title: 'Incentivize Informal Ragpickers / Kabadiwalas',
+                    desc: 'Partner with local scrap collectors to sort recyclable plastics at source.',
+                    cost: '-₹6 Cr Budget',
+                    effect: { budget: -6, clean: +18, eco: +22, jobs: +600 },
+                    feedback: 'Incredible economic return! 600 informal workers gained dignified livelihood and plastic salvage soared.'
+                }
+            ]
+        },
+        {
+            title: 'Round 2: The Wet Food Waste Surge',
+            event: 'Monsoon Compost Opportunity',
+            desc: 'Wholesale vegetable mandis and household wet waste is producing massive leachate slurry. What bio-processing infrastructure do you commission?',
+            choices: [
+                {
+                    title: 'Decentralized Ward Biogas & Vermicompost Units',
+                    desc: 'Convert wet waste locally into cooking gas and agricultural fertilizer.',
+                    cost: '-₹15 Cr Budget',
+                    effect: { budget: -15, clean: +20, eco: +35, jobs: +350 },
+                    feedback: 'Ward-level composting eliminated long transport emissions and produced 200 tons of green organic fertilizer weekly!'
+                },
+                {
+                    title: 'Build Mega Waste-to-Energy Incineration Plant',
+                    desc: 'Burns high-volume waste to generate clean grid electricity.',
+                    cost: '-₹35 Cr Budget',
+                    effect: { budget: -35, clean: +25, eco: +10, jobs: +150 },
+                    feedback: 'Significant capital cost and high-moisture Indian garbage required extra fuel, but generated 10MW of steady power.'
+                },
+                {
+                    title: 'Dig a New Deep Clay-Lined Landfill Pit',
+                    desc: 'Cheap short-term dumping solution for the rainy season.',
+                    cost: '-₹5 Cr Budget',
+                    effect: { budget: -5, clean: -10, eco: -25, jobs: +20 },
+                    feedback: 'Public protests erupted near the new site; methane gas emissions reached dangerous pollution thresholds.'
+                }
+            ]
+        },
+        {
+            title: 'Round 3: Single-Use Plastic Crackdown',
+            event: 'Clogged Stormwater Drains',
+            desc: 'Single-use carry bags and gutka pouches are choking stormwater drains, creating urban flash flooding. How do you enforce the ban?',
+            choices: [
+                {
+                    title: 'Market Raids + Women Self-Help Cloth Bag Subsidy',
+                    desc: 'Strict fines for plastic wholesalers while funding cotton bag production.',
+                    cost: '-₹8 Cr Budget',
+                    effect: { budget: -8, clean: +22, eco: +28, jobs: +400 },
+                    feedback: 'Flood risk reduced by 60%! 400 women SHG artisans gained stable income stitching reusable cloth bags.'
+                },
+                {
+                    title: 'High-Tech AI Camera & Drone Drain Monitoring',
+                    desc: 'Surveil black-spots where plastic is illegally dumped at night.',
+                    cost: '-₹12 Cr Budget',
+                    effect: { budget: -12, clean: +14, eco: +12, jobs: +30 },
+                    feedback: 'Tech cameras spotted repeat commercial offenders, leading to ₹4 Cr in penalty recovery.'
+                },
+                {
+                    title: 'Media Awareness Billboard Campaign',
+                    desc: 'Radio jingles, celebrity hoardings, and school rallies.',
+                    cost: '-₹3 Cr Budget',
+                    effect: { budget: -3, clean: +5, eco: +8, jobs: +10 },
+                    feedback: 'Awareness reached students, but without enforcement on wholesale manufacturers, thin plastics kept appearing.'
+                }
+            ]
+        },
+        {
+            title: 'Round 4: High-Value E-Waste & Circular Hub',
+            event: 'Tech Waste & Lithium Battery Boom',
+            desc: 'The city tech corridor is discarding 15,000 tons of computers, smartphones, and lithium batteries annually. Informal burning is poisoning air.',
+            choices: [
+                {
+                    title: 'Establish Municipal Material Recovery Facility (MRF)',
+                    desc: 'State-of-the-art facility to harvest copper, gold, and clean polymers safely.',
+                    cost: '-₹20 Cr Budget',
+                    effect: { budget: +25, clean: +28, eco: +35, jobs: +500 },
+                    feedback: 'Economic jackpot! Precious metal recovery generated ₹45 Cr in scrap sales, turning waste management into a net profit center!'
+                },
+                {
+                    title: 'Mandatory Extended Producer Responsibility (EPR)',
+                    desc: 'Compel electronics brands to fund authorized take-back collection kiosks.',
+                    cost: '+₹5 Cr Budget',
+                    effect: { budget: +5, clean: +20, eco: +25, jobs: +200 },
+                    feedback: 'Corporate brands funded city drop-boxes, creating an effortless recycling loop for urban citizens.'
+                },
+                {
+                    title: 'Export Unprocessed Electronic Scrap Abroad',
+                    desc: 'Quickly clear municipal warehouses by auctioning raw e-waste containers.',
+                    cost: '+₹10 Cr Budget',
+                    effect: { budget: +10, clean: +10, eco: -10, jobs: -50 },
+                    feedback: 'Brought quick one-off cash, but the city missed out on long-term recycling revenue and industrial green jobs.'
+                }
+            ]
+        }
+    ];
+
+    let currentRound = 0;
+    let budget = 100;
+    let cleanliness = 50;
+    let eco = 50;
+    let jobs = 1200;
+
+    const roundTag = document.getElementById('tycoonRoundTag');
+    const badgeEl = document.getElementById('tycoonEventBadge');
+    const titleEl = document.getElementById('tycoonScenarioTitle');
+    const descEl = document.getElementById('tycoonScenarioDesc');
+    const choicesContainer = document.getElementById('tycoonChoices');
+    const scenarioCard = document.getElementById('tycoonScenarioCard');
+    const summaryCard = document.getElementById('tycoonSummaryCard');
+    const restartBtn = document.getElementById('tycoonRestartBtn');
+
+    if (!roundTag || !choicesContainer) return;
+
+    function renderRound() {
+        const r = rounds[currentRound];
+        roundTag.textContent = r.title;
+        badgeEl.textContent = `🚨 Policy Decision #${currentRound + 1}`;
+        titleEl.textContent = r.event;
+        descEl.textContent = r.desc;
+        choicesContainer.innerHTML = '';
+
+        r.choices.forEach((choice) => {
+            const btn = document.createElement('button');
+            btn.className = 'tycoon-choice-btn';
+            btn.type = 'button';
+            btn.innerHTML = `
+                <div class="choice-info">
+                    <strong>${choice.title}</strong>
+                    <span>${choice.desc}</span>
+                </div>
+                <div class="choice-cost">${choice.cost}</div>`;
+            btn.addEventListener('click', () => selectChoice(choice));
+            choicesContainer.appendChild(btn);
+        });
+    }
+
+    function selectChoice(choice) {
+        budget += choice.effect.budget;
+        cleanliness = Math.max(0, Math.min(100, cleanliness + choice.effect.clean));
+        eco = Math.max(0, Math.min(100, eco + choice.effect.eco));
+        jobs += choice.effect.jobs;
+        updateDashboard();
+
+        alert(`📋 Policy Enacted!
+
+${choice.feedback}`);
+
+        currentRound++;
+        if (currentRound < rounds.length) {
+            renderRound();
+        } else {
+            showTenureReport();
+        }
+    }
+
+    function updateDashboard() {
+        document.getElementById('tycoonBudget').textContent = `₹${budget} Cr`;
+        document.getElementById('tycoonCleanliness').textContent = `${cleanliness}%`;
+        document.getElementById('tycoonEco').textContent = `${eco}%`;
+        document.getElementById('tycoonJobs').textContent = jobs.toLocaleString('en-IN');
+
+        document.getElementById('tycoonBudgetBar').style.width = Math.min(100, Math.max(10, budget)) + '%';
+        document.getElementById('tycoonCleanBar').style.width = cleanliness + '%';
+        document.getElementById('tycoonEcoBar').style.width = eco + '%';
+        document.getElementById('tycoonJobsBar').style.width = Math.min(100, (jobs / 3000) * 100) + '%';
+    }
+
+    function showTenureReport() {
+        scenarioCard.style.display = 'none';
+        summaryCard.style.display = 'block';
+
+        const totalScore = cleanliness + eco + (budget > 50 ? 20 : 0);
+        const title = totalScore >= 180 ? '🌟 National Swachh Bharat Pioneer City' :
+                      totalScore >= 140 ? '🌿 Sustainable Green Metropolis' : '⚠️ Developing Municipality with Lingering Challenges';
+
+        document.getElementById('tycoonSummaryTitle').textContent = title;
+        document.getElementById('tycoonSummaryDesc').textContent =
+            `As Commissioner, you balanced economic capital with ground-level environmental stewardship. Your city created ${jobs.toLocaleString('en-IN')} green livelihoods while maintaining a ${cleanliness}% cleanliness rating!`;
+
+        document.getElementById('tycoonFinalStats').innerHTML = `
+            <div class="final-stat-box"><strong>₹${budget} Cr</strong><span>Final Treasury</span></div>
+            <div class="final-stat-box"><strong>${cleanliness}%</strong><span>City Cleanliness</span></div>
+            <div class="final-stat-box"><strong>${eco}%</strong><span>Eco & Health Index</span></div>
+            <div class="final-stat-box"><strong>${jobs.toLocaleString('en-IN')}</strong><span>Green Jobs</span></div>`;
+    }
+
+    if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+            currentRound = 0;
+            budget = 100; cleanliness = 50; eco = 50; jobs = 1200;
+            updateDashboard();
+            scenarioCard.style.display = 'block';
+            summaryCard.style.display = 'none';
+            renderRound();
+        });
+    }
+
+    renderRound();
+}
+
 
 /* ========== CHARTS ========== */
 function initCharts() {
@@ -523,283 +1023,3 @@ function initCalculator() {
     });
 }
 
-/* ========== LIVE WASTE COUNTER ========== */
-function initLiveCounter() {
-    const counterEl = document.getElementById('liveWasteCounter');
-    if (!counterEl) return;
-
-    // India generates ~170,000 tons/day = ~1.97 tons/second
-    const tonsPerSecond = 170000 / 86400;
-    const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    let secondsSinceMidnight = (now - startOfDay) / 1000;
-
-    function updateCounter() {
-        secondsSinceMidnight += 1;
-        const generated = Math.floor(tonsPerSecond * secondsSinceMidnight);
-        counterEl.textContent = generated.toLocaleString('en-IN');
-    }
-
-    updateCounter();
-    setInterval(updateCounter, 1000);
-}
-
-/* ========== CITY WASTE COMPARISON ========== */
-function initCityComparison() {
-    const select = document.getElementById('citySelect');
-    const canvas = document.getElementById('cityBarChart');
-    if (!select || !canvas) return;
-
-    const cityData = {
-        delhi:      { generated: 11000, collected: 9500, recycled: 2200, composted: 1100 },
-        mumbai:     { generated: 9500,  collected: 8800, recycled: 1900, composted: 950 },
-        bangalore:  { generated: 6000,  collected: 5200, recycled: 1500, composted: 1200 },
-        chandigarh: { generated: 450,   collected: 420,  recycled: 180,  composted: 120 }
-    };
-
-    let cityChart = null;
-
-    function renderCityChart(city) {
-        const d = cityData[city];
-        if (cityChart) cityChart.destroy();
-
-        cityChart = new Chart(canvas, {
-            type: 'bar',
-            data: {
-                labels: ['Generated', 'Collected', 'Recycled', 'Composted'],
-                datasets: [{
-                    label: 'TPD (Tons/Day)',
-                    data: [d.generated, d.collected, d.recycled, d.composted],
-                    backgroundColor: [
-                        'rgba(45,106,79,0.75)', 'rgba(33,150,243,0.75)',
-                        'rgba(64,145,108,0.75)', 'rgba(149,213,178,0.75)'
-                    ],
-                    borderRadius: 6,
-                    borderSkipped: false,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(27,67,50,0.92)',
-                        cornerRadius: 6,
-                        callbacks: {
-                            label: (ctx) => ` ${ctx.parsed.y.toLocaleString('en-IN')} TPD`
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(0,0,0,0.05)' },
-                        ticks: { font: { size: 10 } }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 10 } }
-                    }
-                },
-                animation: { duration: 800 }
-            }
-        });
-    }
-
-    select.addEventListener('change', () => renderCityChart(select.value));
-    renderCityChart('delhi');
-}
-
-/* ========== WASTE-TO-MONEY CONVERTER ========== */
-function initWasteToMoney() {
-    const btn = document.getElementById('w2mCalcBtn');
-    if (!btn) return;
-
-    // Approx INR per kg for scrap dealers
-    const rates = { plastic: 15, paper: 10, metal: 35 };
-    const co2Factors = { plastic: 1.5, paper: 0.8, metal: 2.5 }; // kg CO2 saved per kg recycled
-
-    btn.addEventListener('click', () => {
-        const plastic = parseFloat(document.getElementById('w2mPlastic').value) || 0;
-        const paper = parseFloat(document.getElementById('w2mPaper').value) || 0;
-        const metal = parseFloat(document.getElementById('w2mMetal').value) || 0;
-
-        const totalValue = plastic * rates.plastic + paper * rates.paper + metal * rates.metal;
-        const totalCO2 = plastic * co2Factors.plastic + paper * co2Factors.paper + metal * co2Factors.metal;
-
-        const resultDiv = document.getElementById('w2mResult');
-        document.getElementById('w2mValue').textContent = '₹' + Math.round(totalValue).toLocaleString('en-IN');
-        document.getElementById('w2mSavings').innerHTML =
-            `🌱 You'd save <strong>${totalCO2.toFixed(1)} kg</strong> of CO₂ emissions by recycling this waste.`;
-        resultDiv.style.display = 'block';
-    });
-}
-
-/* ========== WASTE AWARENESS QUIZ ========== */
-function initQuiz() {
-    const questions = [
-        {
-            q: 'Which bin should banana peels go into?',
-            options: ['🔵 Blue (Dry)', '🟢 Green (Wet)', '🔴 Red (Hazardous)'],
-            answer: 1
-        },
-        {
-            q: 'What percentage of India\'s waste is organic/biodegradable?',
-            options: ['~20%', '~35%', '~50%'],
-            answer: 2
-        },
-        {
-            q: 'Used batteries should be disposed in which bin?',
-            options: ['🟢 Green (Wet)', '🔵 Blue (Dry)', '🔴 Red (Hazardous)'],
-            answer: 2
-        },
-        {
-            q: 'Recycling 1 ton of paper saves approximately how many trees?',
-            options: ['5 trees', '17 trees', '50 trees'],
-            answer: 1
-        },
-        {
-            q: 'What does SWM stand for?',
-            options: ['Smart Waste Machine', 'Solid Waste Management', 'Systematic Waste Method'],
-            answer: 1
-        }
-    ];
-
-    let currentQ = 0;
-    let quizScore = 0;
-    const questionEl = document.getElementById('quizQuestion');
-    const optionsEl = document.getElementById('quizOptions');
-    const progressEl = document.getElementById('quizProgress');
-    const resultEl = document.getElementById('quizResult');
-    const scoreEl = document.getElementById('quizScore');
-    const contentEl = document.getElementById('quizContent');
-    const restartBtn = document.getElementById('quizRestart');
-
-    if (!questionEl) return;
-
-    function showQuestion() {
-        const q = questions[currentQ];
-        questionEl.textContent = q.q;
-        optionsEl.innerHTML = '';
-        progressEl.textContent = `Question ${currentQ + 1} of ${questions.length}`;
-
-        q.options.forEach((opt, i) => {
-            const btn = document.createElement('div');
-            btn.className = 'quiz-option';
-            btn.textContent = opt;
-            btn.addEventListener('click', () => handleAnswer(i, btn));
-            optionsEl.appendChild(btn);
-        });
-    }
-
-    function handleAnswer(selected, btnEl) {
-        const q = questions[currentQ];
-        const allOptions = optionsEl.querySelectorAll('.quiz-option');
-        allOptions.forEach(o => o.style.pointerEvents = 'none');
-
-        if (selected === q.answer) {
-            btnEl.classList.add('correct-answer');
-            quizScore++;
-        } else {
-            btnEl.classList.add('wrong-answer');
-            allOptions[q.answer].classList.add('correct-answer');
-        }
-
-        setTimeout(() => {
-            currentQ++;
-            if (currentQ < questions.length) {
-                showQuestion();
-            } else {
-                showResult();
-            }
-        }, 1200);
-    }
-
-    function showResult() {
-        contentEl.style.display = 'none';
-        resultEl.style.display = 'block';
-        const emoji = quizScore >= 4 ? '🏆' : quizScore >= 2 ? '👍' : '📚';
-        scoreEl.innerHTML = `${emoji} You scored <strong>${quizScore}</strong> out of <strong>${questions.length}</strong>!<br><span style="font-size:0.85rem;font-weight:400;color:#4a5a50;">${quizScore >= 4 ? 'Excellent! You\'re a waste management expert!' : quizScore >= 2 ? 'Good effort! Keep learning about waste management.' : 'Keep going! Review the About section to learn more.'}</span>`;
-    }
-
-    restartBtn.addEventListener('click', () => {
-        currentQ = 0;
-        quizScore = 0;
-        contentEl.style.display = 'block';
-        resultEl.style.display = 'none';
-        showQuestion();
-    });
-
-    showQuestion();
-}
-
-/* ========== TIP OF THE DAY ========== */
-function initTipOfDay() {
-    const tips = [
-        '🌿 Composting organic waste at home can reduce your household waste by up to 30% and create nutrient-rich soil for your garden.',
-        '🧴 Rinse plastic containers before recycling – contaminated plastics often end up in landfills instead of being recycled.',
-        '📰 Recycling one ton of newspaper saves about 17 trees and 7,000 gallons of water.',
-        '🔋 Never throw batteries in regular trash. Take them to designated e-waste collection centers to prevent soil contamination.',
-        '🛍️ Carry reusable bags while shopping. India banned single-use plastics in 2022 – support this initiative!',
-        '🥕 Plan your meals to reduce food waste. Indian households waste approximately 50 kg of food per person annually.',
-        '♻️ The recycling symbol with number 1 (PET) and 2 (HDPE) plastics are the most commonly recycled – look for these numbers.',
-        '💧 A single plastic bottle takes 450+ years to decompose. Choose reusable water bottles instead.',
-        '🏠 Segregate waste at source into wet, dry, and hazardous bins – it makes the entire recycling process 3x more efficient.',
-        '📱 E-waste is the fastest growing waste stream globally. Donate or recycle old electronics responsibly.'
-    ];
-
-    const tipEl = document.getElementById('tipText');
-    const newTipBtn = document.getElementById('newTipBtn');
-    if (!tipEl || !newTipBtn) return;
-
-    let lastIndex = -1;
-
-    function showTip() {
-        let idx;
-        do { idx = Math.floor(Math.random() * tips.length); } while (idx === lastIndex);
-        lastIndex = idx;
-        tipEl.textContent = tips[idx];
-    }
-
-    newTipBtn.addEventListener('click', showTip);
-    showTip();
-}
-
-/* ========== ACHIEVEMENT BADGE ========== */
-function updateBadge(score, correct, wrong, gameComplete) {
-    const badgeIcon = document.getElementById('badgeIcon');
-    const badgeTitle = document.getElementById('badgeTitle');
-    const badgeSubtitle = document.getElementById('badgeSubtitle');
-    const badgeDisplay = document.getElementById('badgeDisplay');
-    if (!badgeIcon || !badgeTitle || !badgeSubtitle || !badgeDisplay) return;
-
-    if (!gameComplete) {
-        // Show progress-based badge
-        if (correct > 0) {
-            badgeDisplay.classList.add('earned');
-            badgeIcon.textContent = '🌱';
-            badgeTitle.textContent = 'Eco Beginner';
-            badgeSubtitle.textContent = `You've sorted ${correct} item${correct > 1 ? 's' : ''} correctly. Keep going to upgrade your badge!`;
-        }
-        return;
-    }
-
-    // Game complete – assign final badge
-    badgeDisplay.classList.add('earned');
-    const accuracy = correct / (correct + wrong);
-
-    if (accuracy >= 0.9 && score >= 100) {
-        badgeIcon.textContent = '🏆';
-        badgeTitle.textContent = 'Recycling Champion';
-        badgeSubtitle.textContent = `Perfect performance! Score: ${score} | Accuracy: ${Math.round(accuracy * 100)}%. You're a true sustainability champion!`;
-    } else if (accuracy >= 0.7) {
-        badgeIcon.textContent = '⚔️';
-        badgeTitle.textContent = 'Waste Warrior';
-        badgeSubtitle.textContent = `Great job! Score: ${score} | Accuracy: ${Math.round(accuracy * 100)}%. You understand waste segregation well!`;
-    } else {
-        badgeIcon.textContent = '🌱';
-        badgeTitle.textContent = 'Eco Beginner';
-        badgeSubtitle.textContent = `Score: ${score} | Accuracy: ${Math.round(accuracy * 100)}%. Keep practicing to become a Recycling Champion!`;
-    }
-}

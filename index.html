@@ -19,13 +19,10 @@
     <div class="nav-links" id="navLinks">
       <a href="#hero" class="nav-link">Home</a>
       <a href="#about" class="nav-link">About</a>
-      <a href="#game" class="nav-link">Game</a>
+      <a href="#game" class="nav-link">Games</a>
       <a href="#data" class="nav-link">Data</a>
-      <a href="#impact" class="nav-link">Impact</a>
-      <a href="#challenges" class="nav-link">Challenges</a>
       <a href="#marketplace" class="nav-link">Sell Waste</a>
       <a href="#free-items" class="nav-link">Free Items</a>
-      <a href="#explore" class="nav-link">Explore</a>
       <a href="#calculator" class="nav-link">Calculator</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
@@ -140,44 +137,213 @@
   </div>
 </section>
 
-<!-- ========== GAME ========== -->
+<!-- ========== ECO GAMES ARCADE ========== -->
 <section class="section game-section" id="game">
   <div class="container">
     <div class="section-header animate-on-scroll">
-      <span class="section-tag">🎮 Interactive</span>
-      <h2 class="section-title">Waste Segregation Game</h2>
-      <p class="section-subtitle">Drag each waste item into the correct bin. Learn proper waste segregation while having fun!</p>
+      <span class="section-tag">🎮 Interactive Learning</span>
+      <h2 class="section-title">Eco Games Arcade</h2>
+      <p class="section-subtitle">Level up your sustainability knowledge through fast-paced challenges, segregation puzzles, and city simulation.</p>
     </div>
 
-    <div class="game-container animate-on-scroll">
-      <div class="game-scoreboard">
-        <div class="score-item"><span class="score-label">Score</span><span class="score-value" id="gameScore">0</span></div>
-        <div class="score-item"><span class="score-label">Correct</span><span class="score-value" id="correctCount">0</span></div>
-        <div class="score-item"><span class="score-label">Wrong</span><span class="score-value" id="wrongCount">0</span></div>
-        <button class="btn btn-sm btn-secondary" id="resetGame">🔄 Reset Game</button>
-      </div>
-
-      <div class="game-bins">
-        <div class="bin bin-dropzone bin-green" data-bin="wet">
-          <div class="bin-icon">🟢</div>
-          <div class="bin-label">Wet Waste</div>
-          <div class="bin-desc">Food, Vegetables, Garden Waste</div>
-        </div>
-        <div class="bin bin-dropzone bin-blue" data-bin="dry">
-          <div class="bin-icon">🔵</div>
-          <div class="bin-label">Dry Waste</div>
-          <div class="bin-desc">Plastic, Paper, Metal, Glass</div>
-        </div>
-        <div class="bin bin-dropzone bin-red" data-bin="hazardous">
-          <div class="bin-icon">🔴</div>
-          <div class="bin-label">Hazardous Waste</div>
-          <div class="bin-desc">Batteries, Chemicals, E-waste</div>
-        </div>
-      </div>
-
-      <div class="game-feedback" id="gameFeedback"></div>
-      <div class="game-items" id="gameItems"></div>
+    <!-- Game Switcher Tabs -->
+    <div class="game-tabs-nav animate-on-scroll">
+      <button class="game-tab-btn active" data-game="segregator" type="button">
+        <span class="game-tab-icon">♻️</span>
+        <span class="game-tab-text">
+          <strong>Bin Segregator</strong>
+          <small>Drag &amp; Drop / Tap to Sort</small>
+        </span>
+      </button>
+      <button class="game-tab-btn" data-game="conveyor" type="button">
+        <span class="game-tab-icon">⚡</span>
+        <span class="game-tab-text">
+          <strong>Conveyor Rush</strong>
+          <small>30s Speed Sorting Arcade</small>
+        </span>
+      </button>
+      <button class="game-tab-btn" data-game="detective" type="button">
+        <span class="game-tab-icon">⏳</span>
+        <span class="game-tab-text">
+          <strong>Decomposition Detective</strong>
+          <small>Lifespan Breakdown Challenge</small>
+        </span>
+      </button>
+      <button class="game-tab-btn" data-game="tycoon" type="button">
+        <span class="game-tab-icon">🏙️</span>
+        <span class="game-tab-text">
+          <strong>Eco-City Tycoon</strong>
+          <small>Municipal Cleanliness Sim</small>
+        </span>
+      </button>
     </div>
+
+    <!-- Game 1: Bin Segregator -->
+    <div class="game-panel active" id="gamePanel-segregator">
+      <div class="game-container animate-on-scroll">
+        <div class="game-help-tip">💡 <em>Tip: You can drag items or simply tap an item, then tap a bin to sort!</em></div>
+        <div class="game-scoreboard">
+          <div class="score-item"><span class="score-label">Score</span><span class="score-value" id="gameScore">0</span></div>
+          <div class="score-item"><span class="score-label">Correct</span><span class="score-value" id="correctCount">0</span></div>
+          <div class="score-item"><span class="score-label">Wrong</span><span class="score-value" id="wrongCount">0</span></div>
+          <div class="score-item"><span class="score-label">Streak</span><span class="score-value" id="streakCount">0 🔥</span></div>
+          <button class="btn btn-sm btn-secondary" id="resetGame">🔄 Reset Game</button>
+        </div>
+
+        <div class="game-bins">
+          <div class="bin bin-dropzone bin-green" data-bin="wet">
+            <div class="bin-icon">🟢</div>
+            <div class="bin-label">Wet Waste</div>
+            <div class="bin-desc">Food, Peels, Garden Waste</div>
+          </div>
+          <div class="bin bin-dropzone bin-blue" data-bin="dry">
+            <div class="bin-icon">🔵</div>
+            <div class="bin-label">Dry Waste</div>
+            <div class="bin-desc">Plastic, Paper, Metal, Glass</div>
+          </div>
+          <div class="bin bin-dropzone bin-red" data-bin="hazardous">
+            <div class="bin-icon">🔴</div>
+            <div class="bin-label">Hazardous Waste</div>
+            <div class="bin-desc">Batteries, Chemicals, E-waste</div>
+          </div>
+        </div>
+
+        <div class="game-feedback" id="gameFeedback"></div>
+        <div class="game-items" id="gameItems"></div>
+        <div class="game-fact-ticker" id="gameFactTicker">🌱 Sort any item above to unlock fascinating recycling facts!</div>
+      </div>
+    </div>
+
+    <!-- Game 2: Conveyor Rush -->
+    <div class="game-panel" id="gamePanel-conveyor">
+      <div class="arcade-card">
+        <div class="arcade-header">
+          <div class="arcade-stat"><span class="arcade-stat-label">⏱️ Time Left</span><span class="arcade-stat-val" id="rushTimer">30s</span></div>
+          <div class="arcade-stat"><span class="arcade-stat-label">⭐ Points</span><span class="arcade-stat-val" id="rushScore">0</span></div>
+          <div class="arcade-stat"><span class="arcade-stat-label">🔥 Streak</span><span class="arcade-stat-val" id="rushMultiplier">1x</span></div>
+        </div>
+
+        <div class="conveyor-track">
+          <div class="conveyor-belt-visual"></div>
+          <div class="conveyor-item-stage" id="rushItemStage">
+            <div class="rush-idle-msg">
+              <h3>⚡ Ready for Conveyor Rush?</h3>
+              <p>Items will roll onto the belt. Click the matching bin or press keys <strong>[1]</strong>, <strong>[2]</strong>, or <strong>[3]</strong> as fast as you can!</p>
+              <button class="btn btn-primary" id="startRushBtn">🚀 Start Rush (30s)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="rush-bin-controls">
+          <button class="rush-btn rush-btn-wet" data-bin="wet" id="rushBtnWet" type="button">
+            <span class="rush-btn-key">1</span>
+            <span class="rush-btn-icon">🟢</span>
+            <span class="rush-btn-name">Wet Waste</span>
+          </button>
+          <button class="rush-btn rush-btn-dry" data-bin="dry" id="rushBtnDry" type="button">
+            <span class="rush-btn-key">2</span>
+            <span class="rush-btn-icon">🔵</span>
+            <span class="rush-btn-name">Dry Waste</span>
+          </button>
+          <button class="rush-btn rush-btn-hazard" data-bin="hazardous" id="rushBtnHazard" type="button">
+            <span class="rush-btn-key">3</span>
+            <span class="rush-btn-icon">🔴</span>
+            <span class="rush-btn-name">Hazardous</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game 3: Decomposition Detective -->
+    <div class="game-panel" id="gamePanel-detective">
+      <div class="detective-card">
+        <div class="detective-header">
+          <div class="detective-step" id="detectiveStep">Item 1 of 8</div>
+          <div class="detective-score-badge">Score: <strong id="detectiveScore">0</strong> / 8</div>
+        </div>
+
+        <div class="detective-body">
+          <div class="detective-item-display">
+            <div class="detective-item-icon" id="detectiveIcon">🧴</div>
+            <h3 class="detective-item-name" id="detectiveName">Plastic Beverage Bottle (PET)</h3>
+            <p class="detective-prompt">How long does this item take to decompose in nature?</p>
+          </div>
+
+          <div class="detective-options-grid" id="detectiveOptions">
+            <!-- Dynamically populated options -->
+          </div>
+
+          <div class="detective-reveal-card" id="detectiveReveal" style="display:none;">
+            <div class="detective-reveal-result" id="detectiveResultText"></div>
+            <div class="detective-lifespan-meter">
+              <div class="lifespan-track">
+                <div class="lifespan-marker" id="detectiveMeterBar"></div>
+              </div>
+              <div class="lifespan-labels">
+                <span>Weeks</span>
+                <span>Months</span>
+                <span>Years</span>
+                <span>Centuries</span>
+                <span>Millennia+</span>
+              </div>
+            </div>
+            <p class="detective-fact" id="detectiveFactText"></p>
+            <button class="btn btn-primary btn-sm" id="detectiveNextBtn" type="button">Next Item ➔</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game 4: Eco-City Tycoon -->
+    <div class="game-panel" id="gamePanel-tycoon">
+      <div class="tycoon-card">
+        <div class="tycoon-dashboard">
+          <div class="tycoon-header-info">
+            <span class="tycoon-role">🏛️ Office of the Municipal Commissioner</span>
+            <h3 id="tycoonCityName">Swachh Metropolis 2026</h3>
+            <span class="tycoon-round-tag" id="tycoonRoundTag">Round 1 of 4: The Collection Dilemma</span>
+          </div>
+
+          <div class="tycoon-meters">
+            <div class="tycoon-meter">
+              <div class="meter-meta"><span>💰 City Budget</span><strong id="tycoonBudget">₹100 Cr</strong></div>
+              <div class="meter-track"><div class="meter-fill budget-fill" id="tycoonBudgetBar" style="width: 100%;"></div></div>
+            </div>
+            <div class="tycoon-meter">
+              <div class="meter-meta"><span>🧹 Cleanliness</span><strong id="tycoonCleanliness">50%</strong></div>
+              <div class="meter-track"><div class="meter-fill clean-fill" id="tycoonCleanBar" style="width: 50%;"></div></div>
+            </div>
+            <div class="tycoon-meter">
+              <div class="meter-meta"><span>🌱 Eco &amp; Health</span><strong id="tycoonEco">50%</strong></div>
+              <div class="meter-track"><div class="meter-fill eco-fill" id="tycoonEcoBar" style="width: 50%;"></div></div>
+            </div>
+            <div class="tycoon-meter">
+              <div class="meter-meta"><span>👷 Green Jobs</span><strong id="tycoonJobs">1,200</strong></div>
+              <div class="meter-track"><div class="meter-fill jobs-fill" id="tycoonJobsBar" style="width: 40%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tycoon-scenario-card" id="tycoonScenarioCard">
+          <div class="scenario-badge" id="tycoonEventBadge">🚨 Policy Decision #1</div>
+          <h4 id="tycoonScenarioTitle">Unsegregated Dump Overflow</h4>
+          <p id="tycoonScenarioDesc">Over 60% of municipal trash arrives mixed at the central landfill. A major fire hazard threatens nearby neighborhoods. How do you respond?</p>
+
+          <div class="tycoon-choices" id="tycoonChoices">
+            <!-- 3 choices generated by JS -->
+          </div>
+        </div>
+
+        <div class="tycoon-summary-card" id="tycoonSummaryCard" style="display:none;">
+          <div class="tycoon-summary-icon" id="tycoonSummaryIcon">🏆</div>
+          <h3 id="tycoonSummaryTitle">Tenure Report Card</h3>
+          <p id="tycoonSummaryDesc"></p>
+          <div class="tycoon-final-stats" id="tycoonFinalStats"></div>
+          <button class="btn btn-primary" id="tycoonRestartBtn" type="button">🔄 Serve Another Term</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -206,129 +372,131 @@
   </div>
 </section>
 
-<!-- ========== IMPACT ========== -->
-<section class="section impact-section" id="impact">
-  <div class="container">
-    <div class="section-header animate-on-scroll">
-      <span class="section-tag">💹 Economy</span>
-      <h2 class="section-title">Economic Impact</h2>
-      <p class="section-subtitle">How solid waste management drives India's economy forward.</p>
-    </div>
-    <div class="impact-grid">
-      <div class="impact-card animate-on-scroll">
-        <div class="impact-icon">👷‍♂️</div>
-        <h3>Job Creation</h3>
-        <div class="impact-stat">4 Million+</div>
-        <p>People employed in the waste management sector. The industry could create <strong>6 million additional green jobs</strong> by 2030 through investment in recycling infrastructure and waste processing.</p>
-      </div>
-      <div class="impact-card animate-on-scroll">
-        <div class="impact-icon">🏭</div>
-        <h3>Recycling Revenue</h3>
-        <div class="impact-stat">₹13,000 Cr+</div>
-        <p>Annual value of the recycling industry in India. Segments include plastic recycling (₹6,000 Cr), paper recycling (₹3,500 Cr), and metal scrap recovery (₹3,500 Cr).</p>
-      </div>
-      <div class="impact-card animate-on-scroll">
-        <div class="impact-icon">⚡</div>
-        <h3>Waste-to-Energy</h3>
-        <div class="impact-stat">556 MW</div>
-        <p>India's waste-to-energy capacity target. Operational and planned plants can process 15,000+ TPD of waste, generating clean electricity and reducing landfill dependency.</p>
-      </div>
-      <div class="impact-card animate-on-scroll">
-        <div class="impact-icon">🏥</div>
-        <h3>Healthcare Savings</h3>
-        <div class="impact-stat">₹5,000 Cr+</div>
-        <p>Estimated annual savings from disease reduction through improved waste management. Cleaner cities mean fewer waterborne diseases and respiratory illnesses.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ========== CHALLENGES ========== -->
-<section class="section challenges-section" id="challenges">
-  <div class="container">
-    <div class="section-header animate-on-scroll">
-      <span class="section-tag">⚖️ Analysis</span>
-      <h2 class="section-title">Challenges &amp; Opportunities</h2>
-      <p class="section-subtitle">Understanding the hurdles and the immense potential ahead.</p>
-    </div>
-    <div class="two-columns">
-      <div class="column-card challenges-card animate-on-scroll">
-        <div class="column-header"><span class="column-icon">⚠️</span><h3>Challenges</h3></div>
-        <ul class="column-list">
-          <li><span class="list-icon">🚫</span><div><strong>Poor Waste Segregation</strong><p>Less than 30% of waste is segregated at source, making recycling difficult and costly.</p></div></li>
-          <li><span class="list-icon">🏗️</span><div><strong>Lack of Recycling Infrastructure</strong><p>Only 20% of India's waste processing capacity meets modern standards.</p></div></li>
-          <li><span class="list-icon">🗑️</span><div><strong>Landfill Overflow</strong><p>India's 3,159 dumpsites occupy 10,000+ acres. Major cities face landfill crises.</p></div></li>
-          <li><span class="list-icon">📋</span><div><strong>Weak Policy Enforcement</strong><p>Existing regulations are often poorly implemented at the municipal level.</p></div></li>
-        </ul>
-      </div>
-      <div class="column-card opportunities-card animate-on-scroll">
-        <div class="column-header"><span class="column-icon">🚀</span><h3>Opportunities</h3></div>
-        <ul class="column-list">
-          <li><span class="list-icon">♻️</span><div><strong>Circular Economy</strong><p>Shifting to a circular model could unlock ₹40,000 crore in economic value by 2030.</p></div></li>
-          <li><span class="list-icon">🌿</span><div><strong>Green Jobs</strong><p>Waste management can create 6 million new jobs in recycling, composting, and tech.</p></div></li>
-          <li><span class="list-icon">⚡</span><div><strong>Waste-to-Energy Technology</strong><p>Modern incineration and biogas plants can convert waste into 500+ MW of clean energy.</p></div></li>
-          <li><span class="list-icon">🤖</span><div><strong>Smart Waste Management</strong><p>IoT sensors, AI sorting, and GPS-tracked collection can optimize operations by 40%.</p></div></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ========== NEW: MARKETPLACE — SELL WASTE & LOCATE COLLECTORS ========== -->
+<!-- ========== MARKETPLACE — SELL WASTE & LOCATE COLLECTORS ========== -->
 <section class="section marketplace-section" id="marketplace">
   <div class="container">
     <div class="section-header animate-on-scroll">
-      <span class="section-tag">💰 Marketplace</span>
+      <span class="section-tag">💰 Circular Marketplace</span>
       <h2 class="section-title">Sell Your Waste &amp; Find Collectors</h2>
-      <p class="section-subtitle">List scrap you want to sell, share your location, and let nearby collectors reach out to you directly.</p>
+      <p class="section-subtitle">Earn money from your recyclables, share your pickup location, and connect directly with local scrap collectors on WhatsApp.</p>
+    </div>
+
+    <!-- Marketplace Filter & Search Toolbar -->
+    <div class="mp-toolbar animate-on-scroll">
+      <div class="mp-filter-pills" id="sellCategoryFilters">
+        <button class="mp-filter-pill active" data-cat="all" type="button">All Scrap</button>
+        <button class="mp-filter-pill" data-cat="plastic" type="button">🧴 Plastic</button>
+        <button class="mp-filter-pill" data-cat="paper" type="button">📰 Paper &amp; Boxes</button>
+        <button class="mp-filter-pill" data-cat="metal" type="button">🔩 Metal Scrap</button>
+        <button class="mp-filter-pill" data-cat="ewaste" type="button">📱 E-Waste</button>
+        <button class="mp-filter-pill" data-cat="glass" type="button">🫙 Glass</button>
+      </div>
+      <div class="mp-search-box">
+        <input type="text" id="sellSearchInput" class="mp-search-input" placeholder="🔍 Search scrap by name, kg, or location...">
+      </div>
     </div>
 
     <div class="marketplace-grid animate-on-scroll">
       <!-- Listing form -->
       <div class="marketplace-form-card">
-        <h3>📝 List Your Waste</h3>
+        <div class="card-title-row">
+          <h3>📝 List Waste for Pickup</h3>
+          <span class="form-badge">WhatsApp Direct</span>
+        </div>
         <form id="sellWasteForm">
           <div class="calc-input-group">
-            <label for="sellWasteType">Waste Type</label>
+            <label for="sellWasteType">Waste Category</label>
             <select id="sellWasteType" class="mp-select" required>
-              <option value="">Select type</option>
-              <option value="plastic">🧴 Plastic</option>
-              <option value="paper">📰 Paper / Cardboard</option>
-              <option value="metal">🔩 Metal / Scrap</option>
-              <option value="ewaste">📱 E-Waste</option>
-              <option value="glass">🫙 Glass</option>
-              <option value="mixed">🗑️ Mixed / Other</option>
+              <option value="">Select category</option>
+              <option value="plastic">🧴 Plastic (Bottles, Containers, Film)</option>
+              <option value="paper">📰 Paper &amp; Cardboard Boxes</option>
+              <option value="metal">🔩 Metal &amp; Iron Scrap</option>
+              <option value="ewaste">📱 E-Waste (Phones, Cables, Gadgets)</option>
+              <option value="glass">🫙 Glass Bottles &amp; Jars</option>
+              <option value="mixed">🗑️ Mixed Dry Recyclables</option>
             </select>
           </div>
+
           <div class="mp-row">
             <div class="calc-input-group">
-              <label for="sellQuantity">Quantity (kg)</label>
-              <div class="input-with-unit"><input type="number" id="sellQuantity" min="1" placeholder="e.g. 10" required><span class="input-unit">KG</span></div>
+              <label for="sellQuantity">Estimated Weight (kg)</label>
+              <div class="input-with-unit">
+                <input type="number" id="sellQuantity" min="1" step="0.5" placeholder="e.g. 15" required>
+                <span class="input-unit">KG</span>
+              </div>
             </div>
             <div class="calc-input-group">
-              <label for="sellPrice">Expected Price (optional)</label>
-              <div class="input-with-unit"><span class="input-unit">₹</span><input type="number" id="sellPrice" min="0" placeholder="Per kg"></div>
+              <label for="sellPrice">Expected Price / kg</label>
+              <div class="input-with-unit">
+                <span class="input-unit">₹</span>
+                <input type="number" id="sellPrice" min="0" step="1" placeholder="e.g. 15">
+              </div>
             </div>
           </div>
-          <div class="calc-input-group">
-            <label for="sellPhoto">Photo</label>
-            <input type="file" id="sellPhoto" accept="image/*" class="mp-file">
+
+          <!-- Dynamic Payout Preview -->
+          <div class="payout-estimate-pill" id="sellPayoutPill">
+            <div class="payout-left">
+              <span class="payout-label">Estimated Payout</span>
+              <strong class="payout-value" id="sellEstimatedTotal">₹0</strong>
+            </div>
+            <small class="payout-hint" id="sellRateHint">Market rates: Plastic ~₹15/kg • Paper ~₹10/kg • Metal ~₹35/kg</small>
           </div>
+
+          <!-- Photo Upload Dropzone with Live Preview -->
           <div class="calc-input-group">
-            <label for="sellPhone">Contact Number (WhatsApp)</label>
-            <input type="tel" id="sellPhone" class="mp-text" placeholder="e.g. 98765xxxxx" required>
+            <label>Scrap Photo (Optional but Recommended)</label>
+            <div class="mp-upload-dropzone" id="sellDropzone">
+              <input type="file" id="sellPhoto" accept="image/*" class="mp-file-input">
+              <div class="dropzone-prompt" id="sellDropPrompt">
+                <span class="dropzone-icon">📸</span>
+                <span class="dropzone-text">Click or drag photo of your scrap here</span>
+                <small class="dropzone-sub">JPG, PNG up to 5MB</small>
+              </div>
+              <div class="dropzone-preview" id="sellDropPreview" style="display:none;">
+                <img id="sellPreviewImg" src="" alt="Scrap preview">
+                <button type="button" class="remove-photo-btn" id="sellRemovePhotoBtn" title="Remove photo">✕</button>
+              </div>
+            </div>
           </div>
-          <button type="button" id="shareLocationBtn" class="btn btn-secondary btn-sm mp-location-btn">📍 Share My Location</button>
+
+          <div class="calc-input-group">
+            <label for="sellPhone">Your WhatsApp Number</label>
+            <div class="input-with-unit">
+              <span class="input-unit">🇮🇳 +91</span>
+              <input type="tel" id="sellPhone" class="mp-text" placeholder="9876543210" pattern="[0-9]{10}" required>
+            </div>
+            <small class="field-hint">Scrap buyers will click to message you directly on WhatsApp.</small>
+          </div>
+
+          <button type="button" id="shareLocationBtn" class="btn btn-secondary btn-sm mp-location-btn">
+            <span class="loc-radar-icon">📍</span> <span id="locBtnText">Share Pickup Location</span>
+          </button>
           <span id="locationStatus" class="mp-location-status">Location not shared yet</span>
-          <button type="submit" id="sellSubmitBtn" class="btn btn-primary mp-submit-btn">List for Pickup</button>
+
+          <button type="submit" id="sellSubmitBtn" class="btn btn-primary mp-submit-btn">
+            🚀 List Waste for Pickup
+          </button>
           <p id="sellFormMsg" class="mp-form-msg"></p>
         </form>
       </div>
 
       <!-- Map + listings -->
       <div class="marketplace-map-card">
-        <h3>📍 Nearby Listings</h3>
+        <div class="map-card-header">
+          <div class="map-title-row">
+            <h3>🗺️ Scrap Pickup Map</h3>
+            <span class="live-pulse-badge">Live Map Pins</span>
+          </div>
+          <small class="map-subtitle">Click any pin on the map to see scrap quantity and contact the seller.</small>
+        </div>
         <div id="collectorMap" class="mp-map"></div>
+        
+        <div class="listings-header-bar">
+          <span class="listings-count" id="sellListingsCount">Available Scrap Listings</span>
+        </div>
         <div id="sellListings" class="mp-listings-list">
           <p class="mp-empty-state">Loading listings…</p>
         </div>
@@ -337,169 +505,103 @@
   </div>
 </section>
 
-<!-- ========== NEW: FREE BIG ITEMS EXCHANGE ========== -->
+<!-- ========== FREE BIG ITEMS EXCHANGE ========== -->
 <section class="section free-items-section" id="free-items">
   <div class="container">
     <div class="section-header animate-on-scroll">
-      <span class="section-tag">🎁 Community Exchange</span>
+      <span class="section-tag">🎁 Community Reuse</span>
       <h2 class="section-title">Give Away Big Items for Free</h2>
-      <p class="section-subtitle">Got a table, bed, or iron rods you no longer need? Post it here instead of throwing it away — someone nearby might put it to good use.</p>
+      <p class="section-subtitle">Prevent bulky furniture, electronics, and construction scrap from choking landfills. Give them a second life in someone's home.</p>
+    </div>
+
+    <!-- Free Items Toolbar -->
+    <div class="mp-toolbar animate-on-scroll">
+      <div class="mp-filter-pills" id="freeCategoryFilters">
+        <button class="mp-filter-pill active" data-cat="all" type="button">All Free Items</button>
+        <button class="mp-filter-pill" data-cat="furniture" type="button">🪑 Furniture</button>
+        <button class="mp-filter-pill" data-cat="appliance" type="button">🔌 Appliances</button>
+        <button class="mp-filter-pill" data-cat="metal" type="button">🔩 Metal &amp; Rods</button>
+        <button class="mp-filter-pill" data-cat="electronics" type="button">💻 Electronics</button>
+        <button class="mp-filter-pill" data-cat="other" type="button">📦 Other</button>
+      </div>
+      <div class="mp-search-box">
+        <input type="text" id="freeSearchInput" class="mp-search-input" placeholder="🔍 Search free items by name or city...">
+      </div>
     </div>
 
     <div class="free-items-layout animate-on-scroll">
       <div class="marketplace-form-card">
-        <h3>📤 Post an Item</h3>
+        <div class="card-title-row">
+          <h3>📤 Post a Free Item</h3>
+          <span class="form-badge free-badge">100% Free Donation</span>
+        </div>
         <form id="freeItemForm">
           <div class="calc-input-group">
             <label for="freeItemName">Item Name</label>
-            <input type="text" id="freeItemName" class="mp-text" placeholder="e.g. Wooden Dining Table" required>
+            <input type="text" id="freeItemName" class="mp-text" placeholder="e.g. Wooden Dining Table (4 chairs)" required>
           </div>
+
           <div class="calc-input-group">
             <label for="freeItemCategory">Category</label>
             <select id="freeItemCategory" class="mp-select" required>
               <option value="">Select category</option>
-              <option value="furniture">🪑 Furniture</option>
-              <option value="appliance">🔌 Appliance</option>
-              <option value="metal">🔩 Metal / Iron Rods</option>
-              <option value="electronics">💻 Electronics</option>
-              <option value="other">📦 Other</option>
+              <option value="furniture">🪑 Furniture (Bed, Table, Sofa, Chair)</option>
+              <option value="appliance">🔌 Appliance (Refrigerator, Washer, Cooler)</option>
+              <option value="metal">🔩 Metal Scrap / Iron Rods / Grills</option>
+              <option value="electronics">💻 Electronics / Monitor / TV</option>
+              <option value="other">📦 Other Bulky Reusables</option>
             </select>
           </div>
+
+          <!-- Photo Upload Dropzone with Live Preview -->
           <div class="calc-input-group">
-            <label for="freeItemPhoto">Photo (required)</label>
-            <input type="file" id="freeItemPhoto" accept="image/*" class="mp-file" required>
+            <label>Item Photo (Required)</label>
+            <div class="mp-upload-dropzone" id="freeDropzone">
+              <input type="file" id="freeItemPhoto" accept="image/*" class="mp-file-input">
+              <div class="dropzone-prompt" id="freeDropPrompt">
+                <span class="dropzone-icon">📷</span>
+                <span class="dropzone-text">Click or drag photo of the item</span>
+                <small class="dropzone-sub">Photos help items get claimed 4x faster</small>
+              </div>
+              <div class="dropzone-preview" id="freeDropPreview" style="display:none;">
+                <img id="freePreviewImg" src="" alt="Free item preview">
+                <button type="button" class="remove-photo-btn" id="freeRemovePhotoBtn" title="Remove photo">✕</button>
+              </div>
+            </div>
           </div>
+
           <div class="calc-input-group">
-            <label for="freeItemArea">Area / Locality</label>
+            <label for="freeItemArea">Pickup Area / Locality</label>
             <input type="text" id="freeItemArea" class="mp-text" placeholder="e.g. Sector 22, Chandigarh" required>
           </div>
+
           <div class="calc-input-group">
-            <label for="freeItemPhone">Contact Number</label>
-            <input type="tel" id="freeItemPhone" class="mp-text" placeholder="e.g. 98765xxxxx" required>
+            <label for="freeItemPhone">Your Contact Number (WhatsApp)</label>
+            <div class="input-with-unit">
+              <span class="input-unit">🇮🇳 +91</span>
+              <input type="tel" id="freeItemPhone" class="mp-text" placeholder="9876543210" pattern="[0-9]{10}" required>
+            </div>
           </div>
-          <button type="submit" id="freeItemSubmitBtn" class="btn btn-primary mp-submit-btn">Post Item</button>
+
+          <button type="submit" id="freeItemSubmitBtn" class="btn btn-primary mp-submit-btn">
+            🎁 Post Item for Free Pickup
+          </button>
           <p id="freeItemFormMsg" class="mp-form-msg"></p>
         </form>
       </div>
 
-      <div class="free-items-grid" id="freeItemsGrid">
-        <p class="mp-empty-state">Loading items…</p>
+      <div class="free-items-display-col">
+        <div class="free-items-grid-header">
+          <span class="listings-count" id="freeListingsCount">Community Giveaway Board</span>
+        </div>
+        <div class="free-items-grid" id="freeItemsGrid">
+          <p class="mp-empty-state">Loading items…</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== EXPLORE ========== -->
-<section class="section explore-section" id="explore">
-  <div class="container">
-    <div class="section-header animate-on-scroll">
-      <span class="section-tag">🧰 Explore</span>
-      <h2 class="section-title">Explore More Tools</h2>
-      <p class="section-subtitle">Interactive cards packed with insights, tools, and fun activities about waste management.</p>
-    </div>
-    <div class="explore-grid">
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">⏱️</span><h3>Live Waste Counter</h3></div>
-        <p class="explore-card-desc">Real-time estimate of waste generated in India today.</p>
-        <div class="live-counter-display">
-          <span class="live-counter-value" id="liveWasteCounter">0</span>
-          <span class="live-counter-unit">Tons generated today</span>
-        </div>
-        <div class="live-counter-meta">📈 ~170,000 tons/day avg.</div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">🔄</span><h3>Waste Lifecycle</h3></div>
-        <p class="explore-card-desc">Follow the journey of waste from source to destination.</p>
-        <div class="lifecycle-flow">
-          <div class="lifecycle-step"><span class="lifecycle-icon">🏠</span><span class="lifecycle-label">Household</span></div>
-          <span class="lifecycle-arrow">→</span>
-          <div class="lifecycle-step"><span class="lifecycle-icon">🚛</span><span class="lifecycle-label">Collection</span></div>
-          <span class="lifecycle-arrow">→</span>
-          <div class="lifecycle-step"><span class="lifecycle-icon">🗂️</span><span class="lifecycle-label">Segregation</span></div>
-          <span class="lifecycle-arrow">→</span>
-          <div class="lifecycle-step"><span class="lifecycle-icon">♻️</span><span class="lifecycle-label">Recycling</span></div>
-        </div>
-        <div class="lifecycle-destinations">
-          <span class="lifecycle-dest">🌿 Compost</span>
-          <span class="lifecycle-dest">🏔️ Landfill</span>
-        </div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">🏙️</span><h3>City Waste Comparison</h3></div>
-        <p class="explore-card-desc">Compare waste stats across major Indian cities.</p>
-        <div class="city-select-wrap">
-          <select id="citySelect" class="city-select">
-            <option value="delhi">Delhi</option>
-            <option value="mumbai">Mumbai</option>
-            <option value="bangalore">Bangalore</option>
-            <option value="chandigarh">Chandigarh</option>
-          </select>
-        </div>
-        <div class="city-chart-wrap"><canvas id="cityBarChart"></canvas></div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">💸</span><h3>Waste-to-Money Converter</h3></div>
-        <p class="explore-card-desc">See how much your recyclables are worth.</p>
-        <div class="w2m-inputs">
-          <div class="w2m-row"><label>🧴 Plastic (kg)</label><input type="number" id="w2mPlastic" min="0" placeholder="0"></div>
-          <div class="w2m-row"><label>📰 Paper (kg)</label><input type="number" id="w2mPaper" min="0" placeholder="0"></div>
-          <div class="w2m-row"><label>🔩 Metal (kg)</label><input type="number" id="w2mMetal" min="0" placeholder="0"></div>
-        </div>
-        <button class="btn btn-sm btn-primary" id="w2mCalcBtn">Convert 💰</button>
-        <div class="w2m-result" id="w2mResult" style="display:none;">
-          <div class="w2m-value" id="w2mValue">₹0</div>
-          <div class="w2m-savings" id="w2mSavings"></div>
-        </div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">❓</span><h3>Waste Awareness Quiz</h3></div>
-        <div class="quiz-content" id="quizContent">
-          <div class="quiz-progress" id="quizProgress">Question 1 of 5</div>
-          <div class="quiz-question" id="quizQuestion"></div>
-          <div class="quiz-options" id="quizOptions"></div>
-        </div>
-        <div class="quiz-result" id="quizResult" style="display:none;">
-          <div class="quiz-score" id="quizScore"></div>
-          <button class="btn btn-sm btn-secondary" id="quizRestart">Retry 🔁</button>
-        </div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">💡</span><h3>Tip of the Day</h3></div>
-        <div class="tip-content">
-          <p class="tip-text" id="tipText"></p>
-          <button class="btn btn-sm btn-secondary" id="newTipBtn">New Tip 🔄</button>
-        </div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">🌍</span><h3>Environmental Impact</h3></div>
-        <p class="explore-card-desc">What recycling 1 ton of waste achieves:</p>
-        <div class="env-metrics">
-          <div class="env-metric"><span class="env-metric-icon">💨</span><span class="env-metric-value">2.5 tons</span><span class="env-metric-label">CO₂ Emissions Reduced</span></div>
-          <div class="env-metric"><span class="env-metric-icon">⚡</span><span class="env-metric-value">3,000 kWh</span><span class="env-metric-label">Energy Saved</span></div>
-          <div class="env-metric"><span class="env-metric-icon">🌳</span><span class="env-metric-value">17 Trees</span><span class="env-metric-label">Preserved per Ton of Paper</span></div>
-        </div>
-      </div>
-
-      <div class="explore-card animate-on-scroll">
-        <div class="explore-card-header"><span class="explore-card-icon">🏅</span><h3>Recycling Achievement</h3></div>
-        <p class="explore-card-desc">Complete the waste segregation game to earn a badge!</p>
-        <div class="badge-display" id="badgeDisplay">
-          <div class="badge-icon" id="badgeIcon">🎯</div>
-          <div class="badge-title" id="badgeTitle">Play the Game First</div>
-          <div class="badge-subtitle" id="badgeSubtitle">Score points in the waste segregation game above to unlock your achievement badge.</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
 
 <!-- ========== CALCULATOR ========== -->
 <section class="section calculator-section" id="calculator">
