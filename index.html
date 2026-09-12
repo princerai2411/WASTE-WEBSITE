@@ -27,6 +27,36 @@
       <a href="#calculator" class="nav-link">Calculator</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <div class="nav-auth-wrap" id="navAuthWrap">
+      <!-- Logged-out trigger -->
+      <button class="btn-auth-trigger" id="openAuthModalBtn" type="button">
+        <span class="auth-icon">🔑</span> <span class="auth-btn-text">Login / Register</span>
+      </button>
+
+      <!-- Logged-in profile badge (hidden by default) -->
+      <div class="user-profile-menu" id="userProfileMenu" style="display:none;">
+        <button class="user-badge-btn" id="userBadgeBtn" type="button" aria-expanded="false">
+          <span class="user-role-icon" id="navUserRoleIcon">🙋</span>
+          <span class="user-display-name" id="navUserName">Rahul S.</span>
+          <span class="verified-badge-tick" id="navUserVerifiedTick" title="Verified Account">✓</span>
+          <span class="dropdown-caret">▾</span>
+        </button>
+        <div class="user-dropdown-content" id="userDropdownContent">
+          <div class="user-dropdown-header">
+            <strong id="dropdownFullName">Rahul Sharma</strong>
+            <small id="dropdownRoleDetail">Individual Citizen</small>
+            <span class="user-status-tag" id="dropdownStatusTag">Active Account</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" id="goToDashboardBtn" type="button">
+            <span>🚀</span> Go to My Dashboard
+          </button>
+          <button class="dropdown-item text-danger" id="logoutBtn" type="button">
+            <span>🚪</span> Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -1087,6 +1117,78 @@
   </div>
 </footer>
 
+
+<!-- ========== AUTHENTICATION MODAL (Multi-Role) ========== -->
+<div class="auth-modal-backdrop" id="authModal" style="display:none;">
+  <div class="auth-modal-dialog">
+    <button class="auth-modal-close" id="closeAuthModalBtn" type="button" aria-label="Close modal">✕</button>
+    
+    <div class="auth-modal-header">
+      <div class="auth-logo-badge">♻️</div>
+      <h3 id="authModalTitle">Welcome to WasteWise</h3>
+      <p id="authModalSubtitle">Sign in or register to access personalized circular recycling tools</p>
+    </div>
+
+    <!-- Mode Switcher (Login vs Register) -->
+    <div class="auth-mode-tabs">
+      <button class="auth-mode-tab active" id="tabModeLogin" type="button">🔑 Sign In</button>
+      <button class="auth-mode-tab" id="tabModeRegister" type="button">📝 Create Account</button>
+    </div>
+
+    <!-- Role Selector Cards -->
+    <div class="auth-role-selector">
+      <div class="auth-role-card active" data-role="individual">
+        <span class="role-icon">🙋</span>
+        <div class="role-text">
+          <strong>Individual</strong>
+          <small>Citizen / Resident</small>
+        </div>
+      </div>
+      <div class="auth-role-card" data-role="driver">
+        <span class="role-icon">🚚</span>
+        <div class="role-text">
+          <strong>Driver</strong>
+          <small>Collection Staff</small>
+        </div>
+      </div>
+      <div class="auth-role-card" data-role="ngo">
+        <span class="role-icon">🏢</span>
+        <div class="role-text">
+          <strong>NGO / Org</strong>
+          <small>Welfare Partner</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Demo Logins Bar (Visible in Login Mode) -->
+    <div class="quick-demo-logins" id="quickDemoLogins">
+      <span class="demo-label">⚡ 1-Click Quick Demo Sign-In:</span>
+      <div class="demo-btn-row">
+        <button class="demo-login-pill" id="demoCitizenBtn" type="button">🙋 Rahul (Citizen)</button>
+        <button class="demo-login-pill" id="demoDriverBtn" type="button">🚚 Rajesh (Driver)</button>
+        <button class="demo-login-pill" id="demoNgoBtn" type="button">🏢 Goonj (NGO)</button>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <form id="authForm" class="auth-form">
+      <!-- Role-specific dynamic fields -->
+      <div id="authDynamicFields"></div>
+
+      <!-- Submit & Feedback -->
+      <button type="submit" id="authSubmitBtn" class="btn btn-primary auth-submit-btn">
+        Sign In to Portal ➔
+      </button>
+      <p id="authFormMsg" class="auth-form-msg"></p>
+    </form>
+
+    <div class="auth-footer-help">
+      <small>🔒 Secure SSL Encrypted Verification • WasteWise Sustainability Network</small>
+    </div>
+  </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1095,5 +1197,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="marketplace.js"></script>
 <script src="welfare-network.js"></script>
+<script src="auth.js"></script>
 </body>
 </html>
